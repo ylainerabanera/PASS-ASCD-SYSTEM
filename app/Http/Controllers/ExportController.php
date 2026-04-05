@@ -9,6 +9,7 @@ use App\Models\Schedule;
 use App\Models\Set;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Carbon;
+use ZipArchive;
 
 class ExportController extends Controller
 {
@@ -101,6 +102,27 @@ class ExportController extends Controller
         return $pdf->stream('set-' . $set->id . '-schedule.pdf');
     }
 
+    public function batchFaculty()
+    {
+        return $this->batchZip('faculty', Faculty::query()->orderBy('name')->get(), function ($faculty) {
+            return $this->facultyPdf($faculty);
+        });
+    }
+
+    public function batchCourse()
+    {
+        return $this->batchZip('course', Course::query()->orderBy('name')->get(), function ($course) {
+            return $this->coursePdf($course);
+        });
+    }
+
+    public function batchRoom()
+    {
+        return $this->batchZip('room', Room::query()->orderBy('building_name')->orderBy('room_name')->get(), function ($room) {
+            return $this->roomPdf($room);
+        });
+    }
+
     // CSV export removed
 
     private function buildGrid($schedules): array
@@ -172,5 +194,38 @@ class ExportController extends Controller
             'slots' => $slots,
             'grid' => $grid,
         ];
+    }
+
+    private function batchZip(string $prefix, $items, callable $pdfCallback)
+    {
+        $tmpDir = storage_path('app/tmp');
+        if (!is_dir($tmpDir)) {
+            mkdir($tmpDir, 0777, true);
+        }
+
+        $zipName = $prefix . '-schedules-' . now()->format('Ymd-His') . '.zip';
+        $zipPath = $tmpDir . DIRECTORY_SEPARATOR . $zipName;
+
+        $zip = new ZipArchive();
+        if ($zip->open($zipPath, ZipArchive::CREATE | ZipArchive::OVERWRITE) !== true) {
+            abort(500, 'Could not create zip file.');
+        }
+
+        foreach ($items as $item) {
+            $response = $pdfCallback($item);
+            $pdfContent = $response->getOriginalContent();
+            if (is_object($pdfContent) && method_exists($pdfContent, 'output')) {
+                $pdfContent = $pdfContent->output();
+            }
+
+            $name = $item->name ?? ($item->building_name . ' ' . $item->room_name) ?? (string) $item->id;
+            $safeName = preg_replace('/[^A-Za-z0-9\-_ ]/', '', (string) $name);
+            $fileName = $prefix . '-' . trim(strtolower(str_replace(' ', '-', $safeName))) . '.pdf';
+            $zip->addFromString($fileName, $pdfContent);
+        }
+
+        $zip->close();
+
+        return response()->download($zipPath)->deleteFileAfterSend(true);
     }
 }

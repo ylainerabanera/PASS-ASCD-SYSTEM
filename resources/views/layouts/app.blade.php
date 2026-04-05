@@ -51,6 +51,16 @@
                         <a class="sidebar-link {{ request()->routeIs('sets.*') ? 'active' : '' }}" href="{{ route('sets.index') }}"><i class="bi bi-grid"></i><span>Sets</span></a>
                         <a class="sidebar-link {{ request()->routeIs('subjects.*') ? 'active' : '' }}" href="{{ route('subjects.index') }}"><i class="bi bi-book"></i><span>Subjects</span></a>
                         <a class="sidebar-link {{ request()->routeIs('timetables.*') ? 'active' : '' }}" href="{{ route('timetables.index') }}"><i class="bi bi-table"></i><span>Timetables</span></a>
+                        <button class="sidebar-link report-toggle {{ request()->routeIs('reports.*') ? 'active' : '' }}" type="button" data-bs-toggle="collapse" data-bs-target="#reportMenu" aria-expanded="{{ request()->routeIs('reports.*') ? 'true' : 'false' }}" aria-controls="reportMenu">
+                            <i class="bi bi-bar-chart"></i><span>Reports</span>
+                            <i class="bi bi-caret-down-fill ms-auto"></i>
+                        </button>
+                        <div class="collapse report-menu {{ request()->routeIs('reports.*') ? 'show' : '' }}" id="reportMenu">
+                            <a class="sidebar-link report-item {{ request()->routeIs('reports.faculty-load') ? 'active' : '' }}" href="{{ route('reports.faculty-load') }}">Faculty Load</a>
+                            {{-- <a class="sidebar-link report-item {{ request()->routeIs('reports.conflicts') ? 'active' : '' }}" href="{{ route('reports.conflicts') }}">Conflict Report</a> --}}
+                            <a class="sidebar-link report-item {{ request()->routeIs('reports.room-utilization') ? 'active' : '' }}" href="{{ route('reports.room-utilization') }}">Room Utilization</a>
+                            <a class="sidebar-link report-item {{ request()->routeIs('reports.batch-export') ? 'active' : '' }}" href="{{ route('reports.batch-export') }}">Batch Export</a>
+                        </div>
                         <a class="sidebar-link {{ request()->routeIs('users.*') ? 'active' : '' }}" href="{{ route('users.index') }}"><i class="bi bi-person-circle"></i><span>Users</span></a>
                     </nav>
                 </aside>

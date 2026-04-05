@@ -29,12 +29,14 @@
                             <td>{{ $subject->subject_name }}</td>
                             <td>{{ $subject->units }}</td>
                             <td>
-                                <a class="btn btn-sm btn-edit" href="{{ route('subjects.edit', $subject) }}"><i class="bi bi-pencil-square me-1"></i>Edit</a>
-                                <form action="{{ route('subjects.destroy', $subject) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-sm btn-delete" onclick="return confirm('Delete this subject?')"><i class="bi bi-trash me-1"></i>Delete</button>
-                                </form>
+                                <div class="table-actions">
+                                    <a class="btn btn-sm btn-edit" href="{{ route('subjects.edit', $subject) }}"><i class="bi bi-pencil-square me-1"></i>Edit</a>
+                                    <form action="{{ route('subjects.destroy', $subject) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-sm btn-delete" onclick="return confirm('Delete this subject?')"><i class="bi bi-trash me-1"></i>Delete</button>
+                                    </form>
+                                </div>
                             </td>
                         </tr>
                     @empty

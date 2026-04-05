@@ -31,7 +31,9 @@
                             <td>{{ $user->email }}</td>
                             <td>{{ $user->is_admin ? 'Admin' : 'User' }}</td>
                             <td>
-                                <a class="btn btn-sm btn-edit" href="{{ route('users.edit', $user) }}"><i class="bi bi-pencil-square me-1"></i>Edit</a>
+                                <div class="table-actions">
+                                    <a class="btn btn-sm btn-edit" href="{{ route('users.edit', $user) }}"><i class="bi bi-pencil-square me-1"></i>Edit</a>
+                                </div>
                             </td>
                         </tr>
                     @empty

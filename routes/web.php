@@ -37,5 +37,15 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('course/{course}/pdf', [App\Http\Controllers\ExportController::class, 'coursePdf'])->name('course.pdf');
         Route::get('course/{course}/set/{set}/pdf', [App\Http\Controllers\ExportController::class, 'courseSetPdf'])->name('course.set.pdf');
         Route::get('set/{set}/pdf', [App\Http\Controllers\ExportController::class, 'setPdf'])->name('set.pdf');
+        Route::get('batch/faculty', [App\Http\Controllers\ExportController::class, 'batchFaculty'])->name('batch.faculty');
+        Route::get('batch/course', [App\Http\Controllers\ExportController::class, 'batchCourse'])->name('batch.course');
+        Route::get('batch/room', [App\Http\Controllers\ExportController::class, 'batchRoom'])->name('batch.room');
+    });
+
+    Route::prefix('reports')->name('reports.')->group(function () {
+        Route::get('faculty-load', [App\Http\Controllers\ReportController::class, 'facultyLoad'])->name('faculty-load');
+        Route::get('conflicts', [App\Http\Controllers\ReportController::class, 'conflictReport'])->name('conflicts');
+        Route::get('room-utilization', [App\Http\Controllers\ReportController::class, 'roomUtilization'])->name('room-utilization');
+        Route::get('batch-export', [App\Http\Controllers\ReportController::class, 'batchExport'])->name('batch-export');
     });
 });

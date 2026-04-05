@@ -59,6 +59,7 @@ document.addEventListener('DOMContentLoaded', toggleRoomField);
 document.addEventListener('DOMContentLoaded', () => {
     const layout = document.querySelector('.app-layout');
     const toggle = document.querySelector('[data-sidebar-toggle]');
+    const reportToggle = document.querySelector('.report-toggle');
 
     if (!layout || !toggle) {
         return;
@@ -71,10 +72,37 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     toggle.addEventListener('click', () => {
+        if (window.innerWidth <= 768) {
+            layout.classList.toggle('sidebar-open');
+            return;
+        }
+
         layout.classList.toggle('sidebar-collapsed');
         const isCollapsed = layout.classList.contains('sidebar-collapsed');
         localStorage.setItem('sidebar-collapsed', isCollapsed ? '1' : '0');
         document.documentElement.classList.toggle('sidebar-collapsed', isCollapsed);
+    });
+
+    if (reportToggle) {
+        reportToggle.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                layout.classList.add('sidebar-open');
+                return;
+            }
+            if (layout.classList.contains('sidebar-collapsed')) {
+                layout.classList.remove('sidebar-collapsed');
+                document.documentElement.classList.remove('sidebar-collapsed');
+                localStorage.setItem('sidebar-collapsed', '0');
+            }
+        });
+    }
+
+    document.querySelectorAll('.sidebar a').forEach((link) => {
+        link.addEventListener('click', () => {
+            if (window.innerWidth <= 768) {
+                layout.classList.remove('sidebar-open');
+            }
+        });
     });
 });
 

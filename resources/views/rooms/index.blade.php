@@ -29,14 +29,16 @@
                             <td>{{ $room->building_name }}</td>
                             <td>{{ $room->capacity }}</td>
                             <td>
-                                <a class="btn btn-sm btn-edit" href="{{ route('rooms.edit', $room) }}"><i class="bi bi-pencil-square me-1"></i>Edit</a>
-                                <a class="btn btn-sm btn-view" href="{{ route('timetables.room', $room) }}"><i class="bi bi-calendar3 me-1"></i>Timetable</a>
-                                <form action="{{ route('rooms.destroy', $room) }}" method="POST" class="d-inline">
-                                    @csrf
-                                    @method('DELETE')
-                                    <button class="btn btn-sm btn-delete" onclick="return confirm('Delete this room?')"><i class="bi bi-trash me-1"></i>Delete</button>
-                                </form>
-                                <a class="btn btn-sm btn-download" href="{{ route('exports.room.pdf', $room) }}" target="_blank" rel="noopener"><i class="bi bi-file-earmark-pdf me-1"></i>PDF</a>
+                                <div class="table-actions">
+                                    <a class="btn btn-sm btn-edit" href="{{ route('rooms.edit', $room) }}"><i class="bi bi-pencil-square me-1"></i>Edit</a>
+                                    <a class="btn btn-sm btn-view" href="{{ route('timetables.room', $room) }}"><i class="bi bi-calendar3 me-1"></i>Timetable</a>
+                                    <form action="{{ route('rooms.destroy', $room) }}" method="POST" class="d-inline">
+                                        @csrf
+                                        @method('DELETE')
+                                        <button class="btn btn-sm btn-delete" onclick="return confirm('Delete this room?')"><i class="bi bi-trash me-1"></i>Delete</button>
+                                    </form>
+                                    <a class="btn btn-sm btn-download" href="{{ route('exports.room.pdf', $room) }}" target="_blank" rel="noopener"><i class="bi bi-file-earmark-pdf me-1"></i>PDF</a>
+                                </div>
                             </td>
                         </tr>
                     @empty
