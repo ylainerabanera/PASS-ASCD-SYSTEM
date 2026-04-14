@@ -38,8 +38,10 @@ class Set extends Model
             default => $this->year_level . ' Year',
         };
 
-        $setLabel = $this->set_code ? $this->set_code : 'No Set';
+        if ($this->set_code) {
+            return $this->course->name . ' - ' . $yearLabel . ' - ' . $this->set_code;
+        }
 
-        return $this->course->name . ' - ' . $yearLabel . ' - ' . $setLabel;
+        return $this->course->name . ' - ' . $yearLabel;
     }
 }

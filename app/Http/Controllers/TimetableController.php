@@ -98,6 +98,27 @@ class TimetableController extends Controller
         ], $this->buildGrid($schedules)));
     }
 
+    public function courseSetOnline(Course $course, Set $set)
+    {
+        if ($set->course_id !== $course->id) {
+            abort(404);
+        }
+
+        $schedules = Schedule::with(['subject', 'set.course', 'faculty'])
+            ->where('set_id', $set->id)
+            ->where('class_type', 'online')
+            ->orderBy('day')
+            ->orderBy('start_time')
+            ->get();
+
+        return view('timetables.show', array_merge([
+            'title' => 'Online Course/Set Schedule',
+            'schedules' => $schedules,
+            'course' => $course,
+            'subtitle' => 'Course: ' . $course->name . ' | Set: ' . $set->display_name . ' | Online Classes: ' . $schedules->count(),
+        ], $this->buildGrid($schedules)));
+    }
+
     public function set(Set $set)
     {
         $schedules = Schedule::with(['subject', 'set.course', 'faculty', 'room'])

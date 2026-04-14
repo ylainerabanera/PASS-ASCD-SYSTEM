@@ -27,6 +27,7 @@
     <!-- Scripts -->
     @vite(['resources/sass/app.scss', 'resources/js/app.js'])
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/choices.js/public/assets/styles/choices.min.css">
 </head>
 <body>
     <div id="app" class="app-shell">
@@ -56,9 +57,10 @@
                             <i class="bi bi-caret-down-fill ms-auto"></i>
                         </button>
                         <div class="collapse report-menu {{ request()->routeIs('reports.*') ? 'show' : '' }}" id="reportMenu">
-                            <a class="sidebar-link report-item {{ request()->routeIs('reports.faculty-load') ? 'active' : '' }}" href="{{ route('reports.faculty-load') }}">Faculty Load</a>
+                            {{-- <a class="sidebar-link report-item {{ request()->routeIs('reports.faculty-load') ? 'active' : '' }}" href="{{ route('reports.faculty-load') }}">Faculty Load</a> --}}
                             {{-- <a class="sidebar-link report-item {{ request()->routeIs('reports.conflicts') ? 'active' : '' }}" href="{{ route('reports.conflicts') }}">Conflict Report</a> --}}
-                            <a class="sidebar-link report-item {{ request()->routeIs('reports.room-utilization') ? 'active' : '' }}" href="{{ route('reports.room-utilization') }}">Room Utilization</a>
+                            <a class="sidebar-link report-item {{ request()->routeIs('reports.faculty-availability') ? 'active' : '' }}" href="{{ route('reports.faculty-availability') }}">Faculty Availability</a>
+                            {{-- <a class="sidebar-link report-item {{ request()->routeIs('reports.room-utilization') ? 'active' : '' }}" href="{{ route('reports.room-utilization') }}">Room Utilization</a> --}}
                             <a class="sidebar-link report-item {{ request()->routeIs('reports.batch-export') ? 'active' : '' }}" href="{{ route('reports.batch-export') }}">Batch Export</a>
                         </div>
                         <a class="sidebar-link {{ request()->routeIs('users.*') ? 'active' : '' }}" href="{{ route('users.index') }}"><i class="bi bi-person-circle"></i><span>Users</span></a>
@@ -110,4 +112,5 @@
         @endauth
     </div>
 </body>
+<script src="https://cdn.jsdelivr.net/npm/choices.js/public/assets/scripts/choices.min.js"></script>
 </html>

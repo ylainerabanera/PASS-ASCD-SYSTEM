@@ -132,6 +132,27 @@ document.addEventListener('DOMContentLoaded', () => {
     input.addEventListener('input', filterItems);
 });
 
+document.addEventListener('DOMContentLoaded', () => {
+    if (!window.Choices) {
+        return;
+    }
+
+    document.querySelectorAll('select.searchable-select[data-searchable="true"]').forEach((select) => {
+        if (select.dataset.choicesApplied) {
+            return;
+        }
+        select.dataset.choicesApplied = 'true';
+        new window.Choices(select, {
+            searchEnabled: true,
+            shouldSort: false,
+            placeholder: true,
+            placeholderValue: select.getAttribute('data-placeholder') || 'Select option',
+            searchPlaceholderValue: 'Type to search...',
+            itemSelectText: '',
+        });
+    });
+});
+
 let activeTooltip = null;
 
 const showTooltip = (event, text) => {

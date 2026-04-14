@@ -4,7 +4,7 @@
 
 <div class="mb-3">
     <label class="form-label">Subject</label>
-    <select name="subject_id" class="form-select" required>
+    <select id="subject-select" name="subject_id" class="form-select searchable-select" data-searchable="true" required>
         <option value="">Select subject</option>
         @foreach ($subjects as $subject)
             <option value="{{ $subject->id }}" @selected(old('subject_id', $schedule?->subject_id) == $subject->id)>
@@ -14,9 +14,9 @@
     </select>
 </div>
 
-<div class="mb-3">
+<div class="mb-3 field-compact">
     <label class="form-label">Set</label>
-    <select name="set_id" class="form-select" required>
+    <select name="set_id" class="form-select searchable-select" data-searchable="true" required>
         <option value="">Select set</option>
         @foreach ($sets as $set)
             <option value="{{ $set->id }}"
@@ -26,12 +26,12 @@
             </option>
         @endforeach
     </select>
-    <div class="form-text" data-student-count>Students: -</div>
+    <div class="form-text compact-text compact-tight" data-student-count>Students: -</div>
 </div>
 
 <div class="mb-3">
     <label class="form-label">Faculty</label>
-    <select name="faculty_id" class="form-select" required>
+    <select id="faculty-select" name="faculty_id" class="form-select searchable-select" data-searchable="true" required>
         <option value="">Select faculty</option>
         @foreach ($faculties as $faculty)
             <option value="{{ $faculty->id }}" @selected(old('faculty_id', $schedule?->faculty_id) == $faculty->id)>{{ $faculty->name }}</option>
@@ -68,9 +68,9 @@
     </select>
 </div>
 
-<div class="mb-3" data-room-wrapper>
+<div class="mb-3 field-compact" data-room-wrapper>
     <label class="form-label">Room</label>
-    <select name="room_id" class="form-select">
+    <select name="room_id" class="form-select searchable-select" data-searchable="true">
         <option value="">Select room</option>
         @foreach ($rooms as $room)
             <option value="{{ $room->id }}"
@@ -80,5 +80,5 @@
             </option>
         @endforeach
     </select>
-    <div class="form-text" data-room-capacity>Capacity: -</div>
+    <div class="form-text compact-text compact-tight" data-room-capacity>Capacity: -</div>
 </div>

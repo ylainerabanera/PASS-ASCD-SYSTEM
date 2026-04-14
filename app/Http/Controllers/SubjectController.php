@@ -23,7 +23,7 @@ class SubjectController extends Controller
     {
         $data = $request->validate([
             'subject_code' => ['required', 'string', 'max:50', 'unique:subjects,subject_code'],
-            'subject_name' => ['required', 'string', 'max:255'],
+            'subject_name' => ['required', 'string', 'max:255', 'unique:subjects,subject_name'],
             'units' => ['required', 'integer', 'min:1', 'max:9'],
         ]);
 
@@ -41,7 +41,7 @@ class SubjectController extends Controller
     {
         $data = $request->validate([
             'subject_code' => ['required', 'string', 'max:50', 'unique:subjects,subject_code,' . $subject->id],
-            'subject_name' => ['required', 'string', 'max:255'],
+            'subject_name' => ['required', 'string', 'max:255', 'unique:subjects,subject_name,' . $subject->id],
             'units' => ['required', 'integer', 'min:1', 'max:9'],
         ]);
 

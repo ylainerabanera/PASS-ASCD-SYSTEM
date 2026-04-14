@@ -26,7 +26,7 @@
                             <td>{{ $course->name }}</td>
                             <td>
                                 <a class="btn btn-sm btn-edit" href="{{ route('courses.edit', $course) }}"><i class="bi bi-pencil-square me-1"></i>Edit</a>
-                                <a class="btn btn-sm btn-view" href="{{ route('timetables.course', $course) }}"><i class="bi bi-calendar3 me-1"></i>Timetable</a>
+                                {{-- <a class="btn btn-sm btn-view" href="{{ route('timetables.index') }}"><i class="bi bi-calendar3 me-1"></i>Timetable</a> --}}
                                 <form action="{{ route('courses.destroy', $course) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')

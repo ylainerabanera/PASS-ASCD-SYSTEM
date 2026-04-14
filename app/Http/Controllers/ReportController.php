@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\Faculty;
 use App\Models\Schedule;
 use Illuminate\Support\Collection;
+use Illuminate\Http\Request;
+use Illuminate\Support\Carbon;
 
 class ReportController extends Controller
 {
@@ -154,6 +156,75 @@ class ReportController extends Controller
     public function batchExport()
     {
         return view('reports.batch-export');
+    }
+
+    public function facultyAvailability(Request $request)
+    {
+        $days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
+        $faculties = Faculty::query()->orderBy('name')->get();
+
+        $selectedId = $request->get('faculty_id');
+        $faculty = $selectedId ? $faculties->firstWhere('id', (int) $selectedId) : null;
+
+        $availability = collect();
+
+        if ($faculty) {
+            $schedules = Schedule::query()
+                ->where('faculty_id', $faculty->id)
+                ->whereIn('day', $days)
+                ->orderBy('day')
+                ->orderBy('start_time')
+                ->get()
+                ->groupBy('day');
+
+            $dayStart = Carbon::createFromTime(8, 0);
+            $dayEnd = Carbon::createFromTime(20, 0);
+
+            foreach ($days as $day) {
+                $busy = $schedules->get($day, collect())
+                    ->map(fn ($item) => [
+                        'start' => Carbon::createFromFormat('H:i:s', $item->start_time),
+                        'end' => Carbon::createFromFormat('H:i:s', $item->end_time),
+                    ])
+                    ->sortBy('start')
+                    ->values();
+
+                $freeSlots = [];
+                $cursor = $dayStart->copy();
+
+                foreach ($busy as $slot) {
+                    if ($slot['start']->gt($cursor)) {
+                        $freeSlots[] = [
+                            'start' => $cursor->copy(),
+                            'end' => $slot['start']->copy(),
+                        ];
+                    }
+                    if ($slot['end']->gt($cursor)) {
+                        $cursor = $slot['end']->copy();
+                    }
+                }
+
+                if ($cursor->lt($dayEnd)) {
+                    $freeSlots[] = [
+                        'start' => $cursor->copy(),
+                        'end' => $dayEnd->copy(),
+                    ];
+                }
+
+                $availability[$day] = collect($freeSlots)->map(fn ($slot) => sprintf(
+                    '%s - %s',
+                    $slot['start']->format('g:i A'),
+                    $slot['end']->format('g:i A')
+                ));
+            }
+        }
+
+        return view('reports.faculty-availability', [
+            'days' => $days,
+            'faculties' => $faculties,
+            'faculty' => $faculty,
+            'availability' => $availability,
+        ]);
     }
 
     private function minutesDiff(string $start, string $end): int

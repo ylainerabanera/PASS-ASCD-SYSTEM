@@ -489,6 +489,61 @@ h1, h2, h3 { font-weight: 700; letter-spacing: 0.2px; }
 .form-select {
     border-radius: 12px;
     border-color: var(--border-soft);
+    height: 42px;
+}
+
+.form-control,
+.form-select,
+.choices__inner {
+    min-height: 42px;
+}
+
+.choices__inner {
+    border-radius: 12px;
+    padding: 6px 10px;
+    overflow: visible;
+}
+
+.choices[data-type*="select-one"] .choices__inner {
+    padding-right: 36px;
+}
+
+.choices__list--dropdown .choices__item--selectable {
+    padding: 6px 10px;
+}
+
+.choices__list--single .choices__item {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+.choices__input {
+    width: 100% !important;
+    margin: 0;
+}
+
+.choices__list--dropdown .choices__input {
+    width: 100% !important;
+    max-width: 100%;
+}
+
+.compact-text {
+    margin-top: 4px;
+    font-size: 0.78rem;
+}
+
+.compact-tight {
+    margin-top: 3px;
+    margin-bottom: 10px;
+}
+
+.field-compact {
+    margin-bottom: 4px !important;
+}
+
+.choices {
+    margin-bottom: 0 !important;
 }
 
 .alert {
@@ -708,6 +763,18 @@ h1, h2, h3 { font-weight: 700; letter-spacing: 0.2px; }
     display: block;
     height: 100%;
     background: linear-gradient(90deg, #0d6efd, #6f42c1);
+}
+
+.availability-card {
+    min-height: 180px;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    height: 100%;
+}
+
+.availability-card ul {
+    margin-bottom: 0;
 }
 
 .app-layout.sidebar-collapsed .sidebar {

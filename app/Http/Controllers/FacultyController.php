@@ -22,7 +22,7 @@ class FacultyController extends Controller
     public function store(Request $request)
     {
         $data = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', 'unique:faculties,name'],
         ]);
 
         Faculty::create($data);
@@ -38,7 +38,7 @@ class FacultyController extends Controller
     public function update(Request $request, Faculty $faculty)
     {
         $data = $request->validate([
-            'name' => ['required', 'string', 'max:255'],
+            'name' => ['required', 'string', 'max:255', 'unique:faculties,name,' . $faculty->id],
         ]);
 
         $faculty->update($data);

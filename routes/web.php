@@ -25,10 +25,9 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('/', [App\Http\Controllers\TimetableController::class, 'index'])->name('index');
         Route::get('faculty/{faculty}', [App\Http\Controllers\TimetableController::class, 'faculty'])->name('faculty');
         Route::get('room/{room}', [App\Http\Controllers\TimetableController::class, 'room'])->name('room');
-        Route::get('course/{course}', [App\Http\Controllers\TimetableController::class, 'course'])->name('course');
         Route::get('course/{course}/set/{set}', [App\Http\Controllers\TimetableController::class, 'courseSet'])->name('course.set');
+        Route::get('course/{course}/set/{set}/online', [App\Http\Controllers\TimetableController::class, 'courseSetOnline'])->name('course.set.online');
         Route::get('set/{set}', [App\Http\Controllers\TimetableController::class, 'set'])->name('set');
-        Route::get('online', [App\Http\Controllers\TimetableController::class, 'online'])->name('online');
     });
 
     Route::prefix('exports')->name('exports.')->group(function () {
@@ -47,5 +46,6 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('conflicts', [App\Http\Controllers\ReportController::class, 'conflictReport'])->name('conflicts');
         Route::get('room-utilization', [App\Http\Controllers\ReportController::class, 'roomUtilization'])->name('room-utilization');
         Route::get('batch-export', [App\Http\Controllers\ReportController::class, 'batchExport'])->name('batch-export');
+        Route::get('faculty-availability', [App\Http\Controllers\ReportController::class, 'facultyAvailability'])->name('faculty-availability');
     });
 });
