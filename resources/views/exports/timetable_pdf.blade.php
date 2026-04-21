@@ -9,12 +9,13 @@
         h2 { margin: 0 0 2px 0; font-size: 13px; text-align: center; }
         .subtitle { text-align: center; margin-bottom: 6px; color: #334155; font-size: 10px; }
         table { width: 100%; border-collapse: collapse; table-layout: fixed; }
-        th, td { border: 1px solid #4b5563; padding: 1px 2px; text-align: center; vertical-align: middle; height: 10px; line-height: 1.05; white-space: nowrap; }
+        th, td { border: 1px solid #4b5563; padding: 1px 2px; text-align: center; vertical-align: middle; height: 10px; line-height: 1.05; }
         th { background: #1f4e79; color: #fff; font-weight: 600; }
-        .time-col { width: 85px; background: #eef2f7; color: #0b1220; font-weight: 600; }
+        .time-col { width: 85px; background: #eef2f7; color: #0b1220; font-weight: 600; white-space: nowrap; }
         thead .time-col { background: #1f4e79; color: #fff; }
-        .filled { background: #e9f4c8; }
-        .muted { color: #475569; font-size: 7px; line-height: 1.1; }
+        .filled { background: #e9f4c8; white-space: normal; word-wrap: break-word; word-break: break-word; overflow-wrap: anywhere; }
+        .filled div { white-space: normal; word-wrap: break-word; word-break: break-word; overflow-wrap: anywhere; }
+        .muted { color: #475569; font-size: 7px; line-height: 1.1; white-space: normal; word-wrap: break-word; word-break: break-word; overflow-wrap: anywhere; }
     </style>
 </head>
 <body>
