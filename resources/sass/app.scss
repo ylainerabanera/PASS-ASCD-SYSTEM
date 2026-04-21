@@ -1117,8 +1117,9 @@ h1, h2, h3 { font-weight: 700; letter-spacing: 0.2px; }
 }
 .auth-content {
     min-height: 100vh;
+    // min-height: 100dvh;
     display: flex;
-    align-items: center;
+    align-items: stretch;
     justify-content: center;
     background: #1a1a1a;
     padding: 0;
@@ -1128,8 +1129,11 @@ h1, h2, h3 { font-weight: 700; letter-spacing: 0.2px; }
     position: relative;
     width: 100%;
     min-height: 100vh;
-    display: grid;
-    place-items: center;
+    // min-height: 100dvh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 68px 16px 20px;
     border-radius: 0;
     overflow: hidden;
     background: #1a1a1a;
@@ -1192,6 +1196,7 @@ h1, h2, h3 { font-weight: 700; letter-spacing: 0.2px; }
     background: var(--accent-yellow);
     padding: 26px 28px;
     width: min(360px, 92%);
+    flex: 0 0 auto;
     border-radius: 16px;
     text-align: center;
     box-shadow: 0 20px 50px rgba(0,0,0,0.3);
@@ -1242,6 +1247,12 @@ h1, h2, h3 { font-weight: 700; letter-spacing: 0.2px; }
 .login-link:hover { color: #000; text-decoration: underline; }
 // .login-footer { margin-top: 10px; font-size: 0.75rem; }
 // .login-footer span { font-weight: 700; }
+
+@media (max-height: 760px) {
+    .login-screen {
+        align-items: flex-start;
+    }
+}
 
 .dashboard {
     display: flex;
