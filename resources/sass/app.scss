@@ -844,10 +844,24 @@ h1, h2, h3 { font-weight: 700; letter-spacing: 0.2px; }
     padding: 8px;
     position: relative;
     cursor: pointer;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
 }
 
 .timetable-cell.filled .small {
     line-height: 1.25;
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    display: block;
+}
+
+.timetable-cell.filled .fw-semibold {
+    white-space: normal;
+    word-break: break-word;
+    overflow-wrap: anywhere;
+    display: block;
 }
 
 .floating-tooltip {
@@ -884,6 +898,7 @@ h1, h2, h3 { font-weight: 700; letter-spacing: 0.2px; }
 .timetable-table th,
 .timetable-table td {
     word-wrap: break-word;
+    overflow-wrap: anywhere;
 }
 
 .timetable-table .time-col {
@@ -977,6 +992,7 @@ h1, h2, h3 { font-weight: 700; letter-spacing: 0.2px; }
 
     .timetable-cell.filled {
         padding: 0 1px;
+        white-space: normal;
     }
 
     .print-header {
@@ -995,6 +1011,9 @@ h1, h2, h3 { font-weight: 700; letter-spacing: 0.2px; }
     .timetable-cell.filled .small,
     .timetable-cell.filled .fw-semibold {
         line-height: 1;
+        white-space: normal;
+        word-break: break-word;
+        overflow-wrap: anywhere;
     }
 
     .timetable-table thead th {
