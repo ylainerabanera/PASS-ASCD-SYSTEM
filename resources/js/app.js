@@ -149,6 +149,13 @@ document.addEventListener('DOMContentLoaded', () => {
             placeholderValue: select.getAttribute('data-placeholder') || 'Select option',
             searchPlaceholderValue: 'Type to search...',
             itemSelectText: '',
+            searchResultLimit: 999,
+            renderChoiceLimit: -1,
+            searchFields: ['label', 'value'],
+            fuseOptions: {
+                threshold: 0.15,
+                ignoreLocation: true,
+            },
         });
     });
 });

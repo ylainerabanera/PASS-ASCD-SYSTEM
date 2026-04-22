@@ -15,7 +15,7 @@
             <form method="GET" class="row g-2 align-items-end mb-3">
                 <div class="col-md-6">
                     <select id="availability-faculty-select" name="faculty_id" class="form-select searchable-select" data-searchable="true" data-placeholder="Select faculty" onchange="this.form.submit()">
-                        <option value="">Select faculty</option>
+                        <option value="" disabled hidden @selected(!$faculty)>Select faculty</option>
                         @foreach ($faculties as $item)
                             <option value="{{ $item->id }}" @selected($faculty && $faculty->id === $item->id)>
                                 {{ $item->name }}
