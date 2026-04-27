@@ -94,7 +94,7 @@ class TimetableController extends Controller
             'schedules' => $schedules,
             'pdfUrl' => route('exports.course.set.pdf', [$course, $set]),
             'course' => $course,
-            'subtitle' => 'Course: ' . $course->name . ' | Set: ' . $set->display_name . ' | Total Classes: ' . $schedules->count(),
+            'subtitle' => $this->buildCourseYearSubtitle($set, $schedules->count(), 'Total Classes'),
         ], $this->buildGrid($schedules)));
     }
 
@@ -115,7 +115,7 @@ class TimetableController extends Controller
             'title' => 'Online Course/Set Schedule',
             'schedules' => $schedules,
             'course' => $course,
-            'subtitle' => 'Course: ' . $course->name . ' | Set: ' . $set->display_name . ' | Online Classes: ' . $schedules->count(),
+            'subtitle' => $this->buildCourseYearSubtitle($set, $schedules->count(), 'Online Classes'),
         ], $this->buildGrid($schedules)));
     }
 
@@ -131,7 +131,7 @@ class TimetableController extends Controller
             'title' => 'Set Schedule',
             'schedules' => $schedules,
             'pdfUrl' => route('exports.set.pdf', $set),
-            'subtitle' => 'Set: ' . $set->display_name . ' | Total Classes: ' . $schedules->count(),
+            'subtitle' => $this->buildCourseYearSubtitle($set, $schedules->count(), 'Total Classes'),
         ], $this->buildGrid($schedules)));
     }
 
@@ -221,5 +221,27 @@ class TimetableController extends Controller
             'slots' => $slots,
             'grid' => $grid,
         ];
+    }
+
+    private function buildCourseYearSubtitle(Set $set, int $count, string $countLabel): string
+    {
+        $subtitle = 'Course and Year: ' . $set->course->name . ' - ' . $this->formatYearLevel($set->year_level);
+
+        if ($set->set_code) {
+            $subtitle .= ' | Set: ' . $set->set_code;
+        }
+
+        return $subtitle . ' | ' . $countLabel . ': ' . $count;
+    }
+
+    private function formatYearLevel(int $yearLevel): string
+    {
+        return match ($yearLevel) {
+            1 => '1st Year',
+            2 => '2nd Year',
+            3 => '3rd Year',
+            4 => '4th Year',
+            default => $yearLevel . 'th Year',
+        };
     }
 }

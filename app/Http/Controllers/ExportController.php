@@ -78,7 +78,7 @@ class ExportController extends Controller
 
         $pdf = Pdf::loadView('exports.timetable_pdf', array_merge([
             'title' => 'Course/Set Schedule',
-            'subtitle' => 'Course: ' . $course->name . ' | Set: ' . $set->display_name . ' | Total Classes: ' . $schedules->count(),
+            'subtitle' => $this->buildCourseYearSubtitle($set, $schedules->count(), 'Total Classes'),
             'schedules' => $schedules,
         ], $this->buildGrid($schedules)))->setPaper([0, 0, 936, 612]);
 
@@ -95,7 +95,7 @@ class ExportController extends Controller
 
         $pdf = Pdf::loadView('exports.timetable_pdf', array_merge([
             'title' => 'Set Schedule',
-            'subtitle' => 'Set: ' . $set->display_name . ' | Total Classes: ' . $schedules->count(),
+            'subtitle' => $this->buildCourseYearSubtitle($set, $schedules->count(), 'Total Classes'),
             'schedules' => $schedules,
         ], $this->buildGrid($schedules)))->setPaper([0, 0, 936, 612]);
 
@@ -194,6 +194,28 @@ class ExportController extends Controller
             'slots' => $slots,
             'grid' => $grid,
         ];
+    }
+
+    private function buildCourseYearSubtitle(Set $set, int $count, string $countLabel): string
+    {
+        $subtitle = 'Course and Year: ' . $set->course->name . ' - ' . $this->formatYearLevel($set->year_level);
+
+        if ($set->set_code) {
+            $subtitle .= ' | Set: ' . $set->set_code;
+        }
+
+        return $subtitle . ' | ' . $countLabel . ': ' . $count;
+    }
+
+    private function formatYearLevel(int $yearLevel): string
+    {
+        return match ($yearLevel) {
+            1 => '1st Year',
+            2 => '2nd Year',
+            3 => '3rd Year',
+            4 => '4th Year',
+            default => $yearLevel . 'th Year',
+        };
     }
 
     private function batchZip(string $prefix, $items, callable $pdfCallback)
