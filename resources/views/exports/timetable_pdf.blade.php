@@ -31,13 +31,29 @@
 </head>
 <body>
     @php
+        $dayOrder = [
+            'Monday' => 1,
+            'Tuesday' => 2,
+            'Wednesday' => 3,
+            'Thursday' => 4,
+            'Friday' => 5,
+            'Saturday' => 6,
+        ];
+
         $summaryRows = $schedules
             ->groupBy(fn ($schedule) => $schedule->subject_id . ':' . $schedule->set_id)
-            ->map(function ($items) {
-                $items = $items->sortBy([
-                    ['day', 'asc'],
-                    ['start_time', 'asc'],
-                ])->values();
+            ->map(function ($items) use ($dayOrder) {
+                $items = $items
+                    ->sortBy(function ($schedule) use ($dayOrder) {
+                        $dayRank = $dayOrder[$schedule->day] ?? 99;
+
+                        return sprintf(
+                            '%02d-%s',
+                            $dayRank,
+                            $schedule->start_time
+                        );
+                    })
+                    ->values();
 
                 $first = $items->first();
                 $set = $first->set;
@@ -59,7 +75,7 @@
 
                 $modes = $items->pluck('class_type')->unique()->values();
                 $mode = $modes->count() > 1
-                    ? 'HYBRID'
+                    ? 'Hybrid'
                     : ($modes->first() === 'online' ? 'Online' : 'F2F');
 
                 return [
