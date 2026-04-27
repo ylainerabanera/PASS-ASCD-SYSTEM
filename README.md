@@ -6,24 +6,34 @@ PASS - ASCD System is a web-based academic scheduling system built with Laravel.
 
 - Admin authentication
 - CRUD for users, faculties, rooms, courses, sets, subjects, and schedules
+- Unique validation for:
+  - faculty name
+  - course name
+  - room name
+  - subject code
+  - subject name
 - Schedule conflict detection for:
   - faculty overlap
   - room overlap
   - set overlap
   - room capacity vs student count
 - Face-to-face and online class support
+- Searchable dropdowns for schedule creation and faculty availability
 - Timetables for:
   - faculty
   - room
-  - course and set
-  - online classes by course and set
+  - course and year
+  - course, year, and set
+  - online course, year, and set
 - Reports for:
   - faculty load summary
   - faculty availability
   - conflict report
   - room utilization
   - batch export
-- PDF export for timetables
+- PDF export for timetables with:
+  - page 1 timetable layout
+  - page 2 summary table
 - Responsive admin interface
 
 ## Tech Stack
@@ -43,6 +53,7 @@ PASS - ASCD System is a web-based academic scheduling system built with Laravel.
 - Rooms are required only for face-to-face classes.
 - Online classes do not require a room.
 - Faculty, set, and room conflicts are blocked during schedule creation and update.
+- Schedule summaries in PDF are ordered by school week, not by database insertion order.
 
 ## Installation
 
@@ -107,8 +118,9 @@ http://127.0.0.1:8000
 - Only the admin user can access the system.
 - Create faculties, rooms, courses, sets, and subjects first.
 - Create schedules after master data is ready.
-- Use the Timetables page to open generated timetable views.
+- Use the Timetables page to open generated timetable views by faculty, room, or course/year/set.
 - Use the Reports page for faculty load, availability, conflicts, room utilization, and batch export.
+- Export timetable PDFs to get the visual timetable on page 1 and the schedule summary on page 2.
 
 ## Notes
 
@@ -128,6 +140,15 @@ npm run build
 - `resources/js` - frontend behavior
 - `resources/sass` - custom styling
 - `routes/web.php` - web routes
+
+## Recent Highlights
+
+- Searchable selects now support better matching for subjects, sets, faculties, and rooms.
+- Timetable subtitles use clearer `Course and Year` formatting.
+- PDF summary schedule lines use the format:
+  - `Day | Time | Online`
+  - `Day | Time | Building Room`
+- Faculty availability includes selectable instructor availability by day.
 
 ## Author
 
