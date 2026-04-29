@@ -19,6 +19,7 @@ class Schedule extends Model
         'start_time',
         'end_time',
         'class_type',
+        'g_code',
     ];
 
     public function subject(): BelongsTo

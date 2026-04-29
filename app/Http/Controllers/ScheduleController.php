@@ -90,6 +90,7 @@ class ScheduleController extends Controller
             'start_time' => ['required', 'date_format:H:i'],
             'end_time' => ['required', 'date_format:H:i', 'after:start_time'],
             'class_type' => ['required', 'string', 'in:face_to_face,online'],
+            'g_code' => ['nullable', 'string'],
         ]);
 
         $validator->after(function ($validator) use ($request) {
