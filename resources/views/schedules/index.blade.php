@@ -45,7 +45,21 @@
                                     <td>{{ $schedule->room ? $schedule->room->building_name . ' ' . $schedule->room->room_name : 'Online' }}
                                     </td>
                                     <td>{{ $schedule->class_type === 'online' ? 'Online' : 'Face-to-Face' }}</td>
-                                    <td>{{ $schedule->g_code }}</td>
+                                    <td>
+                                        @if ($schedule->class_type === 'online')
+                                            @php $value = $schedule->g_code ?? 'none'; @endphp
+
+                                            @if ($value === 'none')
+                                                <i style="color:#797979">none</i>
+                                            @else
+                                                {{ $value }}
+                                            @endif
+                                        @else
+                                            <i style="color:#797979">onsite</i>
+                                        @endif
+                                    </td>
+                                    </td>
+
                                     <td>
                                         <div class="table-actions">
                                             <a class="btn btn-sm btn-edit"

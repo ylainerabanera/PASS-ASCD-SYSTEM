@@ -137,6 +137,10 @@ class ScheduleController extends Controller
             ]) + $data;
         }
 
+        if ($data['class_type'] === 'face_to_face') {
+            $data['g_code'] = null;
+        }
+
         $conflictQuery = Schedule::query()
             ->where('day', $data['day'])
             ->where('start_time', '<', $data['end_time'])

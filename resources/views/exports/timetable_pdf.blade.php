@@ -290,7 +290,14 @@
                         @endforeach
                     </td>
                     <td class="text-center">{{ $row['mode'] }}</td>
-                    <td class="text-center">{{ $row['gcode'] }}</td>
+
+                    <td class="text-center">
+                        @php
+                            $value = $row['mode'] === 'F2F' ? 'onsite' : $row['gcode'] ?? 'none';
+                        @endphp
+
+                        {!! in_array($value, ['onsite', 'none']) ? '<i class="muted">' . $value . '</i>' : e($value) !!}
+                    </td>
 
                     <td class="text-center">{{ $row['units'] }}</td>
                 </tr>

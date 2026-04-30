@@ -83,8 +83,8 @@
     <div class="form-text compact-text compact-tight" data-room-capacity>Capacity: -</div>
 </div>
 
-<div class="mb-3">
+<div class="mb-3" data-gcode-wrapper>
     <label class="form-label">Gcode</label>
-    <input type="text" name="g_code" class="form-control" placeholder="enter gcode here, gwen ganda"
-        value="{{ old('g_code', $schedule?->g_code) }}" />
+    <input type="text" name="g_code" id="g_code" class="form-control" placeholder="enter gcode here, gwen ganda"
+        value="{{ old('g_code', $schedule?->g_code) }}">
 </div>
