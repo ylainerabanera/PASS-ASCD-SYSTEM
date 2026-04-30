@@ -198,7 +198,7 @@
 
                 $modes = $items->pluck('class_type')->unique()->values();
                 $mode = $modes->count() > 1 ? 'Hybrid' : ($modes->first() === 'online' ? 'Online' : 'F2F');
-                $gcode = $first->g_code;
+                $gcode = $items->pluck('g_code')->filter()->first();
 
                 return [
                     'subject_code' => $subject->subject_code,
