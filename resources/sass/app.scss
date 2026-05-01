@@ -44,15 +44,14 @@ body {
 .sidebar {
     width: 240px;
     background: var(--accent-yellow);
-    // padding: 24px 16px;
     padding: 24px 16px;
     position: sticky;
     top: 0;
     height: 100vh;
     transition: width 0.25s ease, padding 0.25s ease;
-    // display: flex;
-    // flex-direction: column;
-    // overflow: hidden;
+    display: flex;
+    flex-direction: column;
+    overflow: hidden;
 }
 
 .sidebar-brand {
@@ -96,9 +95,16 @@ body {
     display: flex;
     flex-direction: column;
     gap: 10px;
-    // flex: 1;
-    // overflow-y: auto;
-    // padding-right: 4px;
+    flex: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    padding-right: 4px;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+}
+
+.sidebar-nav::-webkit-scrollbar {
+    display: none;
 }
 
 .sidebar-link {
@@ -114,6 +120,8 @@ body {
     background: transparent;
     width: 100%;
     text-align: left;
+    min-height: 44px;
+    flex-shrink: 0;
 }
 
 .sidebar-link i {
@@ -142,10 +150,13 @@ body {
 
 .report-menu {
     margin-left: 6px;
-    display: flex;
     flex-direction: column;
     gap: 6px;
     padding-left: 12px;
+}
+
+.report-menu.show {
+    display: flex;
 }
 
 .report-item {
@@ -155,6 +166,11 @@ body {
 
 .report-toggle .bi-caret-down-fill {
     font-size: 0.7rem;
+    transition: transform 0.2s ease;
+}
+
+.report-toggle[aria-expanded="true"] .bi-caret-down-fill {
+    transform: rotate(180deg);
 }
 
 .app-layout.sidebar-collapsed .report-menu,
@@ -437,7 +453,7 @@ body {
 }
 
 .btn-download {
-    background: #6f42c1;
+    background: #dc3545;
     color: #fff;
 }
 
@@ -540,6 +556,27 @@ h1, h2, h3 { font-weight: 700; letter-spacing: 0.2px; }
 
 .field-compact {
     margin-bottom: 4px !important;
+}
+
+.schedule-color-picker {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    flex-wrap: wrap;
+}
+
+.schedule-color-input {
+    width: 72px;
+    min-width: 72px;
+    height: 42px;
+    padding: 4px;
+    border-radius: 12px;
+    cursor: pointer;
+}
+
+.schedule-color-copy {
+    color: #6b7280;
+    font-size: 0.82rem;
 }
 
 .choices {
@@ -839,7 +876,7 @@ h1, h2, h3 { font-weight: 700; letter-spacing: 0.2px; }
 
 .timetable-cell.filled {
     background: #e9f4c8;
-    border-left: 3px solid #7aa43a;
+    border-left: 1px solid #7aa43a;
     text-align: center;
     padding: 8px;
     position: relative;
@@ -862,6 +899,11 @@ h1, h2, h3 { font-weight: 700; letter-spacing: 0.2px; }
     word-break: break-word;
     overflow-wrap: anywhere;
     display: block;
+}
+
+.timetable-cell.filled .text-muted {
+    color: inherit !important;
+    opacity: 0.86;
 }
 
 .floating-tooltip {
@@ -1040,7 +1082,43 @@ h1, h2, h3 { font-weight: 700; letter-spacing: 0.2px; }
         transform: translateX(-100%);
         z-index: 40;
         width: 240px;
+        padding: 24px 16px;
         transition: transform 0.25s ease;
+    }
+
+    .app-layout.sidebar-collapsed .sidebar,
+    .sidebar-collapsed .app-layout .sidebar {
+        width: 240px;
+        padding: 24px 16px;
+    }
+
+    .app-layout.sidebar-collapsed .sidebar .brand-text,
+    .app-layout.sidebar-collapsed .sidebar-nav span,
+    .sidebar-collapsed .app-layout .sidebar .brand-text,
+    .sidebar-collapsed .app-layout .sidebar-nav span {
+        display: block;
+    }
+
+    .app-layout.sidebar-collapsed .sidebar-brand,
+    .sidebar-collapsed .app-layout .sidebar-brand {
+        justify-content: flex-start;
+        text-align: left;
+    }
+
+    .app-layout.sidebar-collapsed .brand-mark,
+    .sidebar-collapsed .app-layout .brand-mark {
+        margin: 0;
+    }
+
+    .app-layout.sidebar-collapsed .sidebar-link,
+    .sidebar-collapsed .app-layout .sidebar-link {
+        justify-content: flex-start;
+        padding: 10px 14px;
+    }
+
+    .app-layout.sidebar-collapsed .sidebar-link i,
+    .sidebar-collapsed .app-layout .sidebar-link i {
+        width: 20px;
     }
 
     .app-layout.sidebar-open .sidebar {

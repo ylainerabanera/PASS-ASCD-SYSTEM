@@ -65,8 +65,29 @@
                                         @if ($cell['type'] === 'skip')
                                             @continue
                                         @elseif ($cell['type'] === 'filled')
-                                            @php $schedule = $cell['schedule']; @endphp
+                                            @php
+                                                $schedule = $cell['schedule'];
+                                                $blockColor = $schedule->color ?? '#e9f4c8';
+                                                $blockTextColor = $schedule->timetableTextColor();
+                                                $blockBorderColor = $schedule->timetableBorderColor();
+                                                $durationMinutes = (int) \Carbon\Carbon::parse($schedule->start_time)
+                                                    ->diffInMinutes(\Carbon\Carbon::parse($schedule->end_time));
+                                                $durationHours = intdiv($durationMinutes, 60);
+                                                $remainingMinutes = $durationMinutes % 60;
+                                                $durationParts = [];
+
+                                                if ($durationHours > 0) {
+                                                    $durationParts[] = $durationHours . ' hr' . ($durationHours > 1 ? 's' : '');
+                                                }
+
+                                                if ($remainingMinutes > 0) {
+                                                    $durationParts[] = $remainingMinutes . ' min' . ($remainingMinutes > 1 ? 's' : '');
+                                                }
+
+                                                $durationLabel = implode(' ', $durationParts);
+                                            @endphp
                                             <td rowspan="{{ $cell['rowspan'] }}" class="timetable-cell filled"
+                                                style="background-color: {{ $blockColor }}; color: {{ $blockTextColor }}; border-left-color: {{ $blockBorderColor }};"
                                                 data-tooltip="Subject: {{ $schedule->subject->subject_code }} - {{ $schedule->subject->subject_name }}
 Faculty: {{ $schedule->faculty->name }}
 Set: {{ $schedule->set->display_name }}
@@ -76,7 +97,8 @@ Mode: Online
 Room: {{ $schedule->room ? $schedule->room->building_name . ' ' . $schedule->room->room_name : '' }}
 @endif
 Day: {{ $schedule->day }}
-Time: {{ \Carbon\Carbon::parse($schedule->start_time)->format('g:i A') }} - {{ \Carbon\Carbon::parse($schedule->end_time)->format('g:i A') }}">
+Time: {{ \Carbon\Carbon::parse($schedule->start_time)->format('g:i A') }} - {{ \Carbon\Carbon::parse($schedule->end_time)->format('g:i A') }}
+Duration: {{ $durationLabel }}">
                                                 <div class="fw-semibold">{{ $schedule->subject->subject_code }}</div>
                                                 <div class="small text-muted">{{ $schedule->subject->subject_name }}</div>
                                                 <div class="small">{{ $schedule->set->display_name }}</div>

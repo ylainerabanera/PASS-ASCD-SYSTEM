@@ -42,7 +42,8 @@
                                     <td>{{ $schedule->subject->subject_code }} - {{ $schedule->subject->subject_name }}</td>
                                     <td>{{ $schedule->set->display_name }}</td>
                                     <td>{{ $schedule->faculty->name }}</td>
-                                    <td>{{ $schedule->room ? $schedule->room->building_name . ' ' . $schedule->room->room_name : 'Online' }}
+                                    <td>
+                                        {{ $schedule->class_type === 'online' ? '—' : ($schedule->room ? $schedule->room->building_name . ' ' . $schedule->room->room_name : '—') }}
                                     </td>
                                     <td>{{ $schedule->class_type === 'online' ? 'Online' : 'Face-to-Face' }}</td>
                                     <td>
@@ -58,8 +59,6 @@
                                             <i style="color:#797979">onsite</i>
                                         @endif
                                     </td>
-                                    </td>
-
                                     <td>
                                         <div class="table-actions">
                                             <a class="btn btn-sm btn-edit"

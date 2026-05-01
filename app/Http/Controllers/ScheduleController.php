@@ -41,7 +41,8 @@ class ScheduleController extends Controller
     {
         $data = $this->validateSchedule($request);
 
-        Schedule::create($data);
+        $schedule = Schedule::create($data);
+        $this->syncMatchingScheduleColors($schedule);
 
         return redirect()->route('schedules.index')->with('status', 'Schedule created successfully.');
     }
@@ -56,6 +57,7 @@ class ScheduleController extends Controller
         $data = $this->validateSchedule($request, $schedule);
 
         $schedule->update($data);
+        $this->syncMatchingScheduleColors($schedule);
 
         return redirect()->route('schedules.index')->with('status', 'Schedule updated successfully.');
     }
@@ -91,6 +93,7 @@ class ScheduleController extends Controller
             'end_time' => ['required', 'date_format:H:i', 'after:start_time'],
             'class_type' => ['required', 'string', 'in:face_to_face,online'],
             'g_code' => ['nullable', 'string'],
+            'color' => ['required', 'regex:/^#[0-9A-Fa-f]{6}$/'],
         ]);
 
         $validator->after(function ($validator) use ($request) {
@@ -175,6 +178,14 @@ class ScheduleController extends Controller
         }
 
         return $data;
+    }
+
+    private function syncMatchingScheduleColors(Schedule $schedule): void
+    {
+        Schedule::query()
+            ->where('set_id', $schedule->set_id)
+            ->where('subject_id', $schedule->subject_id)
+            ->update(['color' => $schedule->color]);
     }
 
     private function minutesFromTime(string $time): int

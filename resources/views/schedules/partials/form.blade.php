@@ -1,5 +1,6 @@
 @php
     $currentClassType = old('class_type', $schedule?->class_type ?? 'face_to_face');
+    $currentColor = old('color', $schedule?->color ?? '#e9f4c8');
 @endphp
 
 <div class="mb-3">
@@ -85,6 +86,17 @@
 
 <div class="mb-3" data-gcode-wrapper>
     <label class="form-label">Gcode</label>
-    <input type="text" name="g_code" id="g_code" class="form-control" placeholder="enter gcode here, gwen ganda"
+    <input type="text" name="g_code" id="g_code" class="form-control" placeholder="Enter G-code for online class (e.g. Google Meet code)"
         value="{{ old('g_code', $schedule?->g_code) }}">
+</div>
+
+<div class="mb-3">
+    <label class="form-label">Timetable Color</label>
+    <div class="schedule-color-picker">
+        <input type="color" name="color" class="form-control form-control-color schedule-color-input"
+            value="{{ $currentColor }}" required>
+        {{-- <div class="schedule-color-copy">
+            Same course/year/set and subject will use this background color in the timetable.
+        </div> --}}
+    </div>
 </div>

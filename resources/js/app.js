@@ -74,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const layout = document.querySelector('.app-layout');
     const toggle = document.querySelector('[data-sidebar-toggle]');
     const reportToggle = document.querySelector('.report-toggle');
+    const reportMenu = document.querySelector('#reportMenu');
 
     if (!layout || !toggle) {
         return;
@@ -87,6 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     toggle.addEventListener('click', () => {
         if (window.innerWidth <= 768) {
+            layout.classList.remove('sidebar-collapsed');
+            document.documentElement.classList.remove('sidebar-collapsed');
             layout.classList.toggle('sidebar-open');
             return;
         }
@@ -100,6 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (reportToggle) {
         reportToggle.addEventListener('click', () => {
             if (window.innerWidth <= 768) {
+                layout.classList.remove('sidebar-collapsed');
+                document.documentElement.classList.remove('sidebar-collapsed');
                 layout.classList.add('sidebar-open');
                 return;
             }
@@ -107,6 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 layout.classList.remove('sidebar-collapsed');
                 document.documentElement.classList.remove('sidebar-collapsed');
                 localStorage.setItem('sidebar-collapsed', '0');
+                if (reportMenu) {
+                    reportMenu.classList.add('show');
+                    reportToggle.setAttribute('aria-expanded', 'true');
+                }
             }
         });
     }

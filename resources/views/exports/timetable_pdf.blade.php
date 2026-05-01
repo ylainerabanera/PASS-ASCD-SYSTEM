@@ -37,7 +37,7 @@
 
         th,
         td {
-            border: 1px solid #4b5563;
+            border: 1px solid #111827;
             padding: 1px 2px;
             text-align: center;
             vertical-align: middle;
@@ -46,21 +46,21 @@
         }
 
         th {
-            background: #1f4e79;
+            background: #111111;
             color: #fff;
             font-weight: 600;
         }
 
         .time-col {
             width: 85px;
-            background: #eef2f7;
+            background: #f4f4f5;
             color: #0b1220;
             font-weight: 600;
             white-space: nowrap;
         }
 
         thead .time-col {
-            background: #1f4e79;
+            background: #111111;
             color: #fff;
         }
 
@@ -77,6 +77,10 @@
             word-wrap: break-word;
             word-break: break-word;
             overflow-wrap: anywhere;
+        }
+
+        .filled .muted {
+            color: inherit;
         }
 
         .muted {
@@ -238,8 +242,13 @@
                         @if ($cell['type'] === 'skip')
                             @continue
                         @elseif ($cell['type'] === 'filled')
-                            @php $schedule = $cell['schedule']; @endphp
-                            <td rowspan="{{ $cell['rowspan'] }}" class="filled">
+                            @php
+                                $schedule = $cell['schedule'];
+                                $blockColor = $schedule->color ?? '#e9f4c8';
+                                $blockTextColor = $schedule->timetableTextColor();
+                                $blockBorderColor = $schedule->timetableBorderColor();
+                            @endphp
+                            <td rowspan="{{ $cell['rowspan'] }}" class="filled" style="background-color: {{ $blockColor }}; color: {{ $blockTextColor }};">
                                 <div><strong>{{ $schedule->subject->subject_code }}</strong></div>
                                 <div class="muted">{{ $schedule->subject->subject_name }}</div>
                                 <div class="muted">{{ $schedule->set->display_name }}</div>
