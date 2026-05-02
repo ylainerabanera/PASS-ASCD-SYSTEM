@@ -101,7 +101,7 @@
                         @yield('content')
                     </main>
                     <footer class="app-footer">
-                        © {{ date('Y') }} PASS - ASCD System. All rights reserved.
+                        &copy; {{ date('Y') }} PASS - ASCD System. All rights reserved.
                     </footer>
                 </div>
             </div>

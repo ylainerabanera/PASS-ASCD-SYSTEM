@@ -50,7 +50,7 @@ class ExportController extends Controller
     public function coursePdf(Course $course)
     {
         $schedules = Schedule::with(['subject', 'set.course', 'faculty', 'room'])
-            ->whereHas('set', fn ($query) => $query->where('course_id', $course->id))
+            ->whereHas('set', fn($query) => $query->where('course_id', $course->id))
             ->orderBy('day')
             ->orderBy('start_time')
             ->get();
@@ -161,8 +161,8 @@ class ExportController extends Controller
                 continue;
             }
 
-            $startTime = Carbon::createFromFormat('H:i:s', $schedule->start_time);
-            $endTime = Carbon::createFromFormat('H:i:s', $schedule->end_time);
+            $startTime = Carbon::parse($schedule->start_time);
+            $endTime = Carbon::parse($schedule->end_time);
             $startIndex = $start->diffInMinutes($startTime, false) / 15;
             $endIndex = $start->diffInMinutes($endTime, false) / 15;
 

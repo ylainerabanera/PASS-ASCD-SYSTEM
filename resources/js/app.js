@@ -9,6 +9,9 @@ const toggleRoomField = () => {
         const roomCapacity = form.querySelector('[data-room-capacity]');
         const studentCount = form.querySelector('[data-student-count]');
 
+        //gcode added here
+        const gcodeWrapper = form.querySelector('[data-gcode-wrapper]');
+
         if (!classTypeSelect || !roomWrapper) {
             return;
         }
@@ -16,8 +19,19 @@ const toggleRoomField = () => {
         const updateVisibility = () => {
             if (classTypeSelect.value === 'online') {
                 roomWrapper.classList.add('d-none');
+            
+                //gcode added here again
+                if (gcodeWrapper) {
+                    gcodeWrapper.classList.remove('d-none');
+                }
+            
             } else {
                 roomWrapper.classList.remove('d-none');
+            
+                //and again
+                if (gcodeWrapper) {
+                    gcodeWrapper.classList.add('d-none');
+                }
             }
         };
 
@@ -60,6 +74,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const layout = document.querySelector('.app-layout');
     const toggle = document.querySelector('[data-sidebar-toggle]');
     const reportToggle = document.querySelector('.report-toggle');
+    const reportMenu = document.querySelector('#reportMenu');
 
     if (!layout || !toggle) {
         return;
@@ -73,6 +88,8 @@ document.addEventListener('DOMContentLoaded', () => {
 
     toggle.addEventListener('click', () => {
         if (window.innerWidth <= 768) {
+            layout.classList.remove('sidebar-collapsed');
+            document.documentElement.classList.remove('sidebar-collapsed');
             layout.classList.toggle('sidebar-open');
             return;
         }
@@ -86,6 +103,8 @@ document.addEventListener('DOMContentLoaded', () => {
     if (reportToggle) {
         reportToggle.addEventListener('click', () => {
             if (window.innerWidth <= 768) {
+                layout.classList.remove('sidebar-collapsed');
+                document.documentElement.classList.remove('sidebar-collapsed');
                 layout.classList.add('sidebar-open');
                 return;
             }
@@ -93,6 +112,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 layout.classList.remove('sidebar-collapsed');
                 document.documentElement.classList.remove('sidebar-collapsed');
                 localStorage.setItem('sidebar-collapsed', '0');
+                if (reportMenu) {
+                    reportMenu.classList.add('show');
+                    reportToggle.setAttribute('aria-expanded', 'true');
+                }
             }
         });
     }

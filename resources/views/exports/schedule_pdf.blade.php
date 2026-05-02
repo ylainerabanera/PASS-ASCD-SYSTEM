@@ -33,7 +33,7 @@
                     <td>{{ $schedule->subject->subject_code }} - {{ $schedule->subject->subject_name }}</td>
                     <td>{{ $schedule->set->display_name }}</td>
                     <td>{{ $schedule->faculty->name }}</td>
-                    <td>{{ $schedule->room ? $schedule->room->building_name . ' ' . $schedule->room->room_name : 'Online' }}</td>
+                    <td>{{ $schedule->class_type === 'online' ? '—' : ($schedule->room ? $schedule->room->building_name . ' ' . $schedule->room->room_name : '—') }}</td>
                     <td>{{ $schedule->class_type === 'online' ? 'Online' : 'Face-to-Face' }}</td>
                 </tr>
             @empty
