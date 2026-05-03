@@ -21,11 +21,11 @@ class ExportController extends Controller
             ->orderBy('start_time')
             ->get();
 
-        $pdf = Pdf::loadView('exports.timetable_pdf', array_merge([
+        $pdf = $this->makeTimetablePdf([
             'title' => 'Faculty Schedule',
             'subtitle' => 'Faculty: ' . $faculty->name . ' | Total Classes: ' . $schedules->count(),
             'schedules' => $schedules,
-        ], $this->buildGrid($schedules)))->setPaper([0, 0, 936, 612]);
+        ], $schedules);
 
         return $pdf->stream('faculty-' . $faculty->id . '-schedule.pdf');
     }
@@ -38,11 +38,11 @@ class ExportController extends Controller
             ->orderBy('start_time')
             ->get();
 
-        $pdf = Pdf::loadView('exports.timetable_pdf', array_merge([
+        $pdf = $this->makeTimetablePdf([
             'title' => 'Room Schedule',
             'subtitle' => 'Room: ' . $room->room_name . ' | Building: ' . $room->building_name . ' | Capacity: ' . $room->capacity . ' | Total Classes: ' . $schedules->count(),
             'schedules' => $schedules,
-        ], $this->buildGrid($schedules)))->setPaper([0, 0, 936, 612]);
+        ], $schedules);
 
         return $pdf->stream('room-' . $room->id . '-schedule.pdf');
     }
@@ -55,11 +55,11 @@ class ExportController extends Controller
             ->orderBy('start_time')
             ->get();
 
-        $pdf = Pdf::loadView('exports.timetable_pdf', array_merge([
+        $pdf = $this->makeTimetablePdf([
             'title' => 'Course Schedule',
             'subtitle' => 'Course: ' . $course->name . ' | Total Classes: ' . $schedules->count(),
             'schedules' => $schedules,
-        ], $this->buildGrid($schedules)))->setPaper([0, 0, 936, 612]);
+        ], $schedules);
 
         return $pdf->stream('course-' . $course->id . '-schedule.pdf');
     }
@@ -76,11 +76,11 @@ class ExportController extends Controller
             ->orderBy('start_time')
             ->get();
 
-        $pdf = Pdf::loadView('exports.timetable_pdf', array_merge([
+        $pdf = $this->makeTimetablePdf([
             'title' => 'Course/Set Schedule',
             'subtitle' => $this->buildCourseYearSubtitle($set, $schedules->count(), 'Total Classes'),
             'schedules' => $schedules,
-        ], $this->buildGrid($schedules)))->setPaper([0, 0, 936, 612]);
+        ], $schedules);
 
         return $pdf->stream('course-' . $course->id . '-set-' . $set->id . '-schedule.pdf');
     }
@@ -93,33 +93,70 @@ class ExportController extends Controller
             ->orderBy('start_time')
             ->get();
 
-        $pdf = Pdf::loadView('exports.timetable_pdf', array_merge([
+        $pdf = $this->makeTimetablePdf([
             'title' => 'Set Schedule',
             'subtitle' => $this->buildCourseYearSubtitle($set, $schedules->count(), 'Total Classes'),
             'schedules' => $schedules,
-        ], $this->buildGrid($schedules)))->setPaper([0, 0, 936, 612]);
+        ], $schedules);
 
         return $pdf->stream('set-' . $set->id . '-schedule.pdf');
     }
 
     public function batchFaculty()
     {
-        return $this->batchZip('faculty', Faculty::query()->orderBy('name')->get(), function ($faculty) {
-            return $this->facultyPdf($faculty);
+        $schedules = Schedule::with(['subject', 'set.course', 'room'])
+            ->orderBy('day')
+            ->orderBy('start_time')
+            ->get()
+            ->groupBy('faculty_id');
+
+        return $this->batchZip('faculty', Faculty::query()->orderBy('name')->get(), function ($faculty) use ($schedules) {
+            $facultySchedules = $schedules->get($faculty->id, collect());
+
+            return $this->makeTimetablePdf([
+                'title' => 'Faculty Schedule',
+                'subtitle' => 'Faculty: ' . $faculty->name . ' | Total Classes: ' . $facultySchedules->count(),
+                'schedules' => $facultySchedules,
+            ], $facultySchedules)->output();
         });
     }
 
     public function batchCourse()
     {
-        return $this->batchZip('course', Course::query()->orderBy('name')->get(), function ($course) {
-            return $this->coursePdf($course);
+        $schedules = Schedule::with(['subject', 'set.course', 'faculty', 'room'])
+            ->orderBy('day')
+            ->orderBy('start_time')
+            ->get()
+            ->groupBy(fn ($schedule) => $schedule->set->course_id);
+
+        return $this->batchZip('course', Course::query()->orderBy('name')->get(), function ($course) use ($schedules) {
+            $courseSchedules = $schedules->get($course->id, collect());
+
+            return $this->makeTimetablePdf([
+                'title' => 'Course Schedule',
+                'subtitle' => 'Course: ' . $course->name . ' | Total Classes: ' . $courseSchedules->count(),
+                'schedules' => $courseSchedules,
+            ], $courseSchedules)->output();
         });
     }
 
     public function batchRoom()
     {
-        return $this->batchZip('room', Room::query()->orderBy('building_name')->orderBy('room_name')->get(), function ($room) {
-            return $this->roomPdf($room);
+        $schedules = Schedule::with(['subject', 'set.course', 'faculty'])
+            ->whereNotNull('room_id')
+            ->orderBy('day')
+            ->orderBy('start_time')
+            ->get()
+            ->groupBy('room_id');
+
+        return $this->batchZip('room', Room::query()->orderBy('building_name')->orderBy('room_name')->get(), function ($room) use ($schedules) {
+            $roomSchedules = $schedules->get($room->id, collect());
+
+            return $this->makeTimetablePdf([
+                'title' => 'Room Schedule',
+                'subtitle' => 'Room: ' . $room->room_name . ' | Building: ' . $room->building_name . ' | Capacity: ' . $room->capacity . ' | Total Classes: ' . $roomSchedules->count(),
+                'schedules' => $roomSchedules,
+            ], $roomSchedules)->output();
         });
     }
 
@@ -207,6 +244,15 @@ class ExportController extends Controller
         return $subtitle . ' | ' . $countLabel . ': ' . $count;
     }
 
+    private function makeTimetablePdf(array $data, $schedules)
+    {
+        ini_set('max_execution_time', '300');
+        ini_set('memory_limit', '512M');
+
+        return Pdf::loadView('exports.timetable_pdf', array_merge($data, $this->buildGrid($schedules)))
+            ->setPaper([0, 0, 936, 612]);
+    }
+
     private function formatYearLevel(int $yearLevel): string
     {
         return match ($yearLevel) {
@@ -233,12 +279,11 @@ class ExportController extends Controller
             abort(500, 'Could not create zip file.');
         }
 
+        ini_set('max_execution_time', '300');
+        ini_set('memory_limit', '512M');
+
         foreach ($items as $item) {
-            $response = $pdfCallback($item);
-            $pdfContent = $response->getOriginalContent();
-            if (is_object($pdfContent) && method_exists($pdfContent, 'output')) {
-                $pdfContent = $pdfContent->output();
-            }
+            $pdfContent = $pdfCallback($item);
 
             $name = $item->name ?? ($item->building_name . ' ' . $item->room_name) ?? (string) $item->id;
             $safeName = preg_replace('/[^A-Za-z0-9\-_ ]/', '', (string) $name);

@@ -75,21 +75,36 @@ document.addEventListener('DOMContentLoaded', () => {
     const toggle = document.querySelector('[data-sidebar-toggle]');
     const reportToggle = document.querySelector('.report-toggle');
     const reportMenu = document.querySelector('#reportMenu');
+    const sidebarBreakpoint = 992;
 
     if (!layout || !toggle) {
         return;
     }
 
-    const stored = localStorage.getItem('sidebar-collapsed');
-    if (stored === '1') {
-        layout.classList.add('sidebar-collapsed');
-        document.documentElement.classList.add('sidebar-collapsed');
-    }
+    const isCompactLayout = () => window.innerWidth <= sidebarBreakpoint;
+
+    const clearCollapsedSidebar = () => {
+        layout.classList.remove('sidebar-collapsed');
+        document.documentElement.classList.remove('sidebar-collapsed');
+    };
+
+    const syncSidebarForViewport = () => {
+        if (isCompactLayout()) {
+            clearCollapsedSidebar();
+            return;
+        }
+
+        if (localStorage.getItem('sidebar-collapsed') === '1') {
+            layout.classList.add('sidebar-collapsed');
+            document.documentElement.classList.add('sidebar-collapsed');
+        }
+    };
+
+    syncSidebarForViewport();
 
     toggle.addEventListener('click', () => {
-        if (window.innerWidth <= 768) {
-            layout.classList.remove('sidebar-collapsed');
-            document.documentElement.classList.remove('sidebar-collapsed');
+        if (isCompactLayout()) {
+            clearCollapsedSidebar();
             layout.classList.toggle('sidebar-open');
             return;
         }
@@ -102,15 +117,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
     if (reportToggle) {
         reportToggle.addEventListener('click', () => {
-            if (window.innerWidth <= 768) {
-                layout.classList.remove('sidebar-collapsed');
-                document.documentElement.classList.remove('sidebar-collapsed');
+            if (isCompactLayout()) {
+                clearCollapsedSidebar();
                 layout.classList.add('sidebar-open');
                 return;
             }
             if (layout.classList.contains('sidebar-collapsed')) {
-                layout.classList.remove('sidebar-collapsed');
-                document.documentElement.classList.remove('sidebar-collapsed');
+                clearCollapsedSidebar();
                 localStorage.setItem('sidebar-collapsed', '0');
                 if (reportMenu) {
                     reportMenu.classList.add('show');
@@ -122,10 +135,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
     document.querySelectorAll('.sidebar a').forEach((link) => {
         link.addEventListener('click', () => {
-            if (window.innerWidth <= 768) {
+            if (isCompactLayout()) {
                 layout.classList.remove('sidebar-open');
             }
         });
+    });
+
+    window.addEventListener('resize', () => {
+        layout.classList.remove('sidebar-open');
+        syncSidebarForViewport();
     });
 });
 
@@ -179,6 +197,30 @@ document.addEventListener('DOMContentLoaded', () => {
                 threshold: 0.15,
                 ignoreLocation: true,
             },
+        });
+    });
+});
+
+document.addEventListener('DOMContentLoaded', () => {
+    document.querySelectorAll('a[href*="/exports/"], a.btn-download').forEach((link) => {
+        if (link.dataset.exportLoadingApplied) {
+            return;
+        }
+
+        link.dataset.exportLoadingApplied = 'true';
+        link.addEventListener('click', () => {
+            const originalHtml = link.innerHTML;
+            const originalWidth = link.offsetWidth;
+
+            link.style.minWidth = `${originalWidth}px`;
+            link.classList.add('is-loading');
+            link.innerHTML = '<span class="spinner-border spinner-border-sm me-1" aria-hidden="true"></span>Preparing...';
+
+            setTimeout(() => {
+                link.classList.remove('is-loading');
+                link.innerHTML = originalHtml;
+                link.style.minWidth = '';
+            }, 8000);
         });
     });
 });
