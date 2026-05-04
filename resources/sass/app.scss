@@ -480,6 +480,11 @@ body {
     border: 1px solid rgba(0, 0, 0, 0.35);
 }
 
+.btn.is-loading {
+    pointer-events: none;
+    opacity: 0.82;
+}
+
 .btn-sm {
     padding: 6px 10px;
 }
@@ -664,7 +669,7 @@ h1, h2, h3 { font-weight: 700; letter-spacing: 0.2px; }
     width: 150px;
 }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
     .timetable-table td.time-col {
         font-size: 0.7rem;
     }
@@ -1063,7 +1068,7 @@ h1, h2, h3 { font-weight: 700; letter-spacing: 0.2px; }
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
     .timetable-wrapper {
         max-height: 70vh;
     }
@@ -1073,7 +1078,7 @@ h1, h2, h3 { font-weight: 700; letter-spacing: 0.2px; }
     }
 }
 
-@media (max-width: 768px) {
+@media (max-width: 992px) {
     .sidebar {
         position: fixed;
         left: 0;

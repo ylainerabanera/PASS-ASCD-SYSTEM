@@ -17,7 +17,7 @@
     <script>
         (function () {
             try {
-                if (localStorage.getItem('sidebar-collapsed') === '1') {
+                if (window.innerWidth > 992 && localStorage.getItem('sidebar-collapsed') === '1') {
                     document.documentElement.classList.add('sidebar-collapsed');
                 }
             } catch (e) {}
