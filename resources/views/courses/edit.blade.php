@@ -4,8 +4,6 @@
 <div class="container">
     <h3 class="mb-3">Edit Course</h3>
 
-    @include('partials.errors')
-
     <form method="POST" action="{{ route('courses.update', $course) }}" class="card card-body">
         @csrf
         @method('PUT')

@@ -9,6 +9,7 @@ use App\Models\Schedule;
 use App\Models\Set;
 use Barryvdh\DomPDF\Facade\Pdf;
 use Illuminate\Support\Carbon;
+use Illuminate\Support\Str;
 use ZipArchive;
 
 class ExportController extends Controller
@@ -61,7 +62,7 @@ class ExportController extends Controller
             'schedules' => $schedules,
         ], $schedules);
 
-        return $pdf->stream('course-' . $course->id . '-schedule.pdf');
+        return $pdf->stream($this->resolveCourseFileName($course));
     }
 
     public function courseSetPdf(Course $course, Set $set)
@@ -82,7 +83,7 @@ class ExportController extends Controller
             'schedules' => $schedules,
         ], $schedules);
 
-        return $pdf->stream('course-' . $course->id . '-set-' . $set->id . '-schedule.pdf');
+        return $pdf->stream($this->resolveCourseSetFileName($course, $set));
     }
 
     public function setPdf(Set $set)
@@ -99,12 +100,12 @@ class ExportController extends Controller
             'schedules' => $schedules,
         ], $schedules);
 
-        return $pdf->stream('set-' . $set->id . '-schedule.pdf');
+        return $pdf->stream($this->resolveCourseSetFileName($set->course, $set));
     }
 
     public function batchFaculty()
     {
-        $schedules = Schedule::with(['subject', 'set.course', 'room'])
+        $schedules = Schedule::with(['subject', 'set.course', 'room', 'faculty'])
             ->orderBy('day')
             ->orderBy('start_time')
             ->get()
@@ -127,16 +128,18 @@ class ExportController extends Controller
             ->orderBy('day')
             ->orderBy('start_time')
             ->get()
-            ->groupBy(fn ($schedule) => $schedule->set->course_id);
+            ->groupBy('set_id');
 
-        return $this->batchZip('course', Course::query()->orderBy('name')->get(), function ($course) use ($schedules) {
-            $courseSchedules = $schedules->get($course->id, collect());
+        $sets = Set::with('course')->get()->sortBy(fn ($set) => [$set->course->name, $set->year_level])->values();
+
+        return $this->batchZip('course', $sets, function (Set $set) use ($schedules) {
+            $setSchedules = $schedules->get($set->id, collect());
 
             return $this->makeTimetablePdf([
                 'title' => 'Course Schedule',
-                'subtitle' => 'Course: ' . $course->name . ' | Total Classes: ' . $courseSchedules->count(),
-                'schedules' => $courseSchedules,
-            ], $courseSchedules)->output();
+                'subtitle' => 'Course: ' . $set->course->name . ' | Year: ' . $this->formatYearLevel($set->year_level) . ' | Total Classes: ' . $setSchedules->count(),
+                'schedules' => $setSchedules,
+            ], $setSchedules)->output();
         });
     }
 
@@ -284,15 +287,82 @@ class ExportController extends Controller
 
         foreach ($items as $item) {
             $pdfContent = $pdfCallback($item);
-
-            $name = $item->name ?? ($item->building_name . ' ' . $item->room_name) ?? (string) $item->id;
-            $safeName = preg_replace('/[^A-Za-z0-9\-_ ]/', '', (string) $name);
-            $fileName = $prefix . '-' . trim(strtolower(str_replace(' ', '-', $safeName))) . '.pdf';
+            $fileName = $this->resolveBatchFileName($prefix, $item);
             $zip->addFromString($fileName, $pdfContent);
         }
 
         $zip->close();
 
         return response()->download($zipPath)->deleteFileAfterSend(true);
+    }
+
+    private function resolveBatchFileName(string $prefix, $item): string
+    {
+        if ($item instanceof Faculty) {
+            $name = strtoupper($item->name);
+            $safeName = preg_replace('/[^A-Z0-9 ._-]/', '', $name);
+            $safeName = trim(preg_replace('/\s+/', ' ', $safeName));
+            if ($safeName === '') {
+                $safeName = (string) $item->id;
+            }
+
+            return $safeName . '.pdf';
+        }
+
+        if ($item instanceof Set) {
+            $safeName = $this->resolveCourseSetName($item);
+            if ($safeName === '') {
+                $safeName = (string) $item->id;
+            }
+
+            return $safeName . '.pdf';
+        }
+
+        if ($item instanceof Room) {
+            $name = trim($item->building_name . ' ' . $item->room_name);
+        } else {
+            $name = $item->name ?? (string) $item->id;
+        }
+
+        $slug = Str::slug($name, '-');
+        if ($slug === '') {
+            $slug = (string) $item->id;
+        }
+
+        return $prefix . '-' . $slug . '.pdf';
+    }
+
+    private function resolveCourseSetFileName(Course $course, Set $set): string
+    {
+        $safeName = $this->resolveCourseSetName($set);
+        if ($safeName === '') {
+            $safeName = $course->id . '-' . $set->id;
+        }
+
+        return $safeName . '.pdf';
+    }
+
+    private function resolveCourseSetName(Set $set): string
+    {
+        $name = strtoupper($set->course->name . ' ' . $set->year_level);
+
+        if ($set->set_code) {
+            $name .= ' - ' . strtoupper($set->set_code);
+        }
+
+        $safeName = preg_replace('/[^A-Z0-9 ._-]/', '', $name);
+        return trim(preg_replace('/\s+/', ' ', $safeName));
+    }
+
+    private function resolveCourseFileName(Course $course): string
+    {
+        $name = strtoupper($course->name);
+        $safeName = preg_replace('/[^A-Z0-9 ._-]/', '', $name);
+        $safeName = trim(preg_replace('/\s+/', ' ', $safeName));
+        if ($safeName === '') {
+            $safeName = (string) $course->id;
+        }
+
+        return $safeName . '.pdf';
     }
 }

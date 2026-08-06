@@ -4,8 +4,6 @@
 <div class="container">
     <h3 class="mb-3">Edit Schedule</h3>
 
-    @include('partials.errors')
-
     <form method="POST" action="{{ route('schedules.update', $schedule) }}" class="card card-body" data-schedule-form>
         @csrf
         @method('PUT')

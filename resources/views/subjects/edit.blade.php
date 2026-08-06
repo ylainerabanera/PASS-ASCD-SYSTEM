@@ -4,8 +4,6 @@
 <div class="container">
     <h3 class="mb-3">Edit Subject</h3>
 
-    @include('partials.errors')
-
     <form method="POST" action="{{ route('subjects.update', $subject) }}" class="card card-body">
         @csrf
         @method('PUT')

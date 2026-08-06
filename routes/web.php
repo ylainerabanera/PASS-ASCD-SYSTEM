@@ -1,12 +1,9 @@
 <?php
 
-use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Route;
 
-Route::get('/', function () {
-    // return auth()->check() ? redirect()->route('dashboard') : redirect()->route('login');
-    return Auth::check() ? redirect()->route('dashboard') : redirect()->route('login');
-});
+Route::get('/', [App\Http\Controllers\HomeController::class, 'welcome']);
 
 Auth::routes(['register' => false]);
 
@@ -40,6 +37,14 @@ Route::middleware(['auth', 'admin'])->group(function () {
         Route::get('batch/course', [App\Http\Controllers\ExportController::class, 'batchCourse'])->name('batch.course');
         Route::get('batch/room', [App\Http\Controllers\ExportController::class, 'batchRoom'])->name('batch.room');
     });
+
+    Route::get('room-reservations', [App\Http\Controllers\RoomReservationController::class, 'index'])->name('room-reservations.index');
+    Route::get('room-reservations/create', [App\Http\Controllers\RoomReservationController::class, 'create'])->name('room-reservations.create');
+    Route::post('room-reservations', [App\Http\Controllers\RoomReservationController::class, 'store'])->name('room-reservations.store');
+    Route::get('room-reservations/{roomReservation}', [App\Http\Controllers\RoomReservationController::class, 'show'])->name('room-reservations.show');
+    Route::get('room-reservations/{roomReservation}/edit', [App\Http\Controllers\RoomReservationController::class, 'edit'])->name('room-reservations.edit');
+    Route::put('room-reservations/{roomReservation}', [App\Http\Controllers\RoomReservationController::class, 'update'])->name('room-reservations.update');
+    Route::delete('room-reservations/{roomReservation}', [App\Http\Controllers\RoomReservationController::class, 'destroy'])->name('room-reservations.destroy');
 
     Route::prefix('reports')->name('reports.')->group(function () {
         Route::get('faculty-load', [App\Http\Controllers\ReportController::class, 'facultyLoad'])->name('faculty-load');

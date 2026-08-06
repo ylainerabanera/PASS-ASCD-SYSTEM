@@ -2,27 +2,35 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Http\Request;
+use App\Services\DashboardService;
+use Illuminate\Support\Facades\Auth;
 
 class HomeController extends Controller
 {
+    public function __construct(
+        protected DashboardService $dashboardService
+    ) {
+        $this->middleware(['auth', 'admin'])->only('index');
+    }
+
     /**
-     * Create a new controller instance.
-     *
-     * @return void
+     * Show the application landing page for guests.
      */
-    public function __construct()
+    public function welcome()
     {
-        $this->middleware(['auth', 'admin']);
+        if (Auth::check()) {
+            return redirect()->route('dashboard');
+        }
+
+        // return view('welcome');
+        return view('auth/login');
     }
 
     /**
      * Show the application dashboard.
-     *
-     * @return \Illuminate\Contracts\Support\Renderable
      */
     public function index()
     {
-        return view('home');
+        return view('home', $this->dashboardService->getViewData());
     }
 }

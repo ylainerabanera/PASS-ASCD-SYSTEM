@@ -4,8 +4,6 @@
 <div class="container">
     <h3 class="mb-3">Add Faculty</h3>
 
-    @include('partials.errors')
-
     <form method="POST" action="{{ route('faculties.store') }}" class="card card-body">
         @csrf
         <div class="mb-3">

@@ -19,6 +19,7 @@ PASS - ASCD System is a web-based academic scheduling system built with Laravel.
   - room capacity vs student count
 - Face-to-face and online class support
 - Searchable dropdowns for schedule creation and faculty availability
+- Room reservation CRUD with conflict detection and delete confirmation
 - Timetables for:
   - faculty
   - room
@@ -30,7 +31,7 @@ PASS - ASCD System is a web-based academic scheduling system built with Laravel.
   - faculty availability
   - conflict report
   - room utilization
-  - batch export
+- Batch export available directly from the main navigation
 - PDF export for timetables with:
   - page 1 timetable layout
   - page 2 summary table
@@ -45,6 +46,7 @@ PASS - ASCD System is a web-based academic scheduling system built with Laravel.
 - Vite
 - DomPDF
 - Choices.js
+- SweetAlert2
 
 ## System Rules
 
@@ -119,7 +121,8 @@ http://127.0.0.1:8000
 - Create faculties, rooms, courses, sets, and subjects first.
 - Create schedules after master data is ready.
 - Use the Timetables page to open generated timetable views by faculty, room, or course/year/set.
-- Use the Reports page for faculty load, availability, conflicts, room utilization, and batch export.
+- Use the Reports page for faculty load, availability, conflicts, and room utilization.
+- Use the Batch Export sidebar link for fast access to batch data export options.
 - Export timetable PDFs to get the visual timetable on page 1 and the schedule summary on page 2.
 
 ## Notes

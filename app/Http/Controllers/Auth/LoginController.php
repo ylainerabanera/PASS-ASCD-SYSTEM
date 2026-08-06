@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Illuminate\Http\Request;
 
 class LoginController extends Controller
 {
@@ -27,7 +28,7 @@ class LoginController extends Controller
      */
     protected $redirectTo = '/dashboard';
 
-    protected function authenticated($request, $user)
+    protected function authenticated(Request $request, $user)
     {
         if (!$user->is_admin) {
             $this->guard()->logout();
@@ -36,6 +37,15 @@ class LoginController extends Controller
                 'email' => 'Admin access only.',
             ]);
         }
+
+        // $request->session()->flash('status', 'Logged in successfully.');
+        $request->session();
+    }
+
+    protected function loggedOut(Request $request)
+    {
+        // return redirect()->route('login')->with('status', 'Logged out successfully.');
+        return redirect()->route('login');
     }
 
     /**

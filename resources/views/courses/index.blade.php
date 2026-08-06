@@ -7,8 +7,6 @@
         <a class="btn btn-add" href="{{ route('courses.create') }}"><i class="bi bi-plus-lg me-1"></i>Add Course</a>
     </div>
 
-    @include('partials.flash')
-
     <div class="card">
         <div class="card-body">
             <table class="table align-middle">

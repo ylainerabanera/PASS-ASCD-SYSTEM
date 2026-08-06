@@ -1,8 +1,19 @@
 export const setupConfirmActions = () => {
     document.querySelectorAll('[data-confirm]').forEach((element) => {
-        element.addEventListener('click', (event) => {
-            if (!window.confirm(element.dataset.confirm)) {
-                event.preventDefault();
+        element.addEventListener('click', async (event) => {
+            event.preventDefault();
+
+            const result = await Swal.fire({
+                title: 'Are you sure?',
+                text: element.dataset.confirm,
+                icon: 'warning',
+                showCancelButton: true,
+                confirmButtonText: 'Yes, delete it',
+                cancelButtonText: 'Cancel',
+            });
+
+            if (result.isConfirmed) {
+                element.closest('form')?.submit();
             }
         });
     });

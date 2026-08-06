@@ -9,8 +9,6 @@
         @endif
     </div>
 
-    @include('partials.flash')
-
     <div class="card">
         <div class="card-body">
             <table class="table align-middle">

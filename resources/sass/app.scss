@@ -1207,8 +1207,13 @@ h1, h2, h3 { font-weight: 700; letter-spacing: 0.2px; }
 }
 
 @media (max-width: 360px) {
+    // .sidebar {
+    //     width: 230px;
+    // }
+    
+    
     .sidebar {
-        width: 220px;
+        width: auto;
     }
 
     .btn {
@@ -1245,8 +1250,148 @@ h1, h2, h3 { font-weight: 700; letter-spacing: 0.2px; }
     background:
         linear-gradient(180deg, rgba(0, 0, 0, 0.700), rgba(0, 0, 0, 0.700)),
         url('/images/login-bg.jpg') center/cover no-repeat;
-    // border-radius: 0;
     z-index: 0;
+}
+
+/* SweetAlert2 enterprise-style overrides */
+.swal2-enterprise-popup {
+    border-radius: 20px;
+    box-shadow: 0 28px 70px rgba(15, 23, 42, 0.18);
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    max-width: 460px;
+    font-family: 'Montserrat', system-ui, sans-serif;
+}
+
+.swal2-enterprise-modal {
+    padding: 32px 28px 24px;
+}
+
+.swal2-enterprise-toast {
+    width: 380px;
+    padding: 18px 20px;
+    border-radius: 18px;
+    box-shadow: 0 22px 52px rgba(15, 23, 42, 0.16);
+    border: 1px solid rgba(15, 23, 42, 0.08);
+    background: #ffffff;
+    color: #0f172a;
+    display: grid;
+    grid-template-columns: auto 1fr auto;
+    gap: 14px;
+    align-items: center;
+}
+
+.swal2-enterprise-toast-success {
+    border-left: 4px solid #16a34a;
+}
+
+.swal2-enterprise-toast-error {
+    border-left: 4px solid #dc2626;
+}
+
+.swal2-enterprise-toast-warning {
+    border-left: 4px solid #f59e0b;
+}
+
+.swal2-enterprise-title {
+    font-size: 1rem;
+    font-weight: 700;
+    letter-spacing: -0.01em;
+    color: #111827;
+    margin-bottom: 4px;
+}
+
+.swal2-enterprise-content {
+    font-size: 0.93rem;
+    color: #475569;
+    line-height: 1.6;
+    margin-top: 0.25rem;
+}
+
+.swal2-enterprise-actions {
+    gap: 0.85rem;
+    justify-content: center;
+    padding-top: 18px;
+}
+
+.swal2-enterprise-confirm-btn,
+.swal2-enterprise-delete-btn {
+    background: linear-gradient(135deg, #16a34a, #22c55e);
+    color: #ffffff !important;
+    padding: 12px 22px;
+    border-radius: 999px;
+    border: none;
+    font-size: 0.95rem;
+    min-width: 140px;
+    box-shadow: 0 16px 28px rgba(34, 197, 94, 0.18);
+}
+
+.swal2-enterprise-delete-btn {
+    background: linear-gradient(135deg, #dc2626, #ef4444);
+    box-shadow: 0 16px 28px rgba(220, 38, 38, 0.18);
+}
+
+.swal2-enterprise-cancel-btn {
+    background: #f8fafc;
+    color: #334155 !important;
+    border: 1px solid #e2e8f0;
+    padding: 12px 22px;
+    border-radius: 999px;
+    font-size: 0.95rem;
+    min-width: 140px;
+}
+
+.swal2-enterprise-close-btn {
+    color: #64748b;
+    opacity: 1;
+}
+
+.swal2-enterprise-toast .swal2-icon {
+    margin: 0;
+    width: 36px;
+    height: 36px;
+    line-height: 36px;
+    font-size: 1.2rem;
+}
+
+.swal2-enterprise-toast .swal2-title {
+    display: block;
+    margin: 0;
+}
+
+.swal2-enterprise-toast-body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+    padding-top: 2px;
+}
+
+.swal2-enterprise-progress {
+    height: 4px !important;
+    border-radius: 999px;
+    background: rgba(15, 23, 42, 0.08);
+}
+
+.swal2-enterprise-toast .swal2-close {
+    margin-left: 0.5rem;
+    color: #64748b;
+}
+
+.swal2-show {
+    animation: swal2-fade-in 0.22s ease-out;
+}
+
+.swal2-hide {
+    animation: swal2-fade-out 0.18s ease-in forwards;
+}
+
+@keyframes swal2-fade-in {
+    from { opacity: 0; transform: translateY(-10px) scale(0.96); }
+    to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes swal2-fade-out {
+    from { opacity: 1; transform: translateY(0) scale(1); }
+    to { opacity: 0; transform: translateY(-10px) scale(0.96); }
 }
 
 .login-topbar {

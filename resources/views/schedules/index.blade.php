@@ -7,8 +7,6 @@
             <a class="btn btn-add" href="{{ route('schedules.create') }}"><i class="bi bi-plus-lg me-1"></i>Add Schedule</a>
         </div>
 
-        @include('partials.flash')
-
         @php
             $groupedSchedules = $schedules->groupBy('day');
             $orderedDays = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];

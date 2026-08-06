@@ -2,21 +2,11 @@
 
 @section('content')
 @php
-    $today = \Carbon\Carbon::now('Asia/Manila');
-    $todayName = $today->format('l');
-    $ongoing = \App\Models\Schedule::with(['subject', 'faculty', 'room', 'set'])
-        ->where('day', $todayName)
-        ->orderBy('start_time')
-        ->get();
-
-    $facultyCount = \App\Models\Faculty::count();
-    $courseCount = \App\Models\Course::count();
-    $scheduleCount = \App\Models\Schedule::count();
-    $roomCount = \App\Models\Room::count();
-
-    $monthStart = $today->copy()->startOfMonth();
-    $daysInMonth = $today->daysInMonth;
-    $startWeekday = (int) $monthStart->dayOfWeekIso; // 1 (Mon) - 7 (Sun)
+    $stats = $__data['stats'] ?? [];
+    $facultyCount = $stats['facultyCount'] ?? 0;
+    $courseCount = $stats['courseCount'] ?? 0;
+    $scheduleCount = $stats['scheduleCount'] ?? 0;
+    $roomCount = $stats['roomCount'] ?? 0;
 @endphp
 
 <div class="dashboard">
@@ -27,37 +17,11 @@
         </div>
     </div>
 
-    @include('partials.flash')
-
     <div class="stats-grid">
-        <div class="stat-card">
-            <div class="stat-icon"><i class="bi bi-people"></i></div>
-            <div>
-                <div class="stat-number">{{ $facultyCount }}</div>
-                <div class="stat-label">Faculties</div>
-            </div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon"><i class="bi bi-journal-bookmark"></i></div>
-            <div>
-                <div class="stat-number">{{ $courseCount }}</div>
-                <div class="stat-label">Courses</div>
-            </div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon"><i class="bi bi-calendar2-week"></i></div>
-            <div>
-                <div class="stat-number">{{ $scheduleCount }}</div>
-                <div class="stat-label">Schedules</div>
-            </div>
-        </div>
-        <div class="stat-card">
-            <div class="stat-icon"><i class="bi bi-door-closed"></i></div>
-            <div>
-                <div class="stat-number">{{ $roomCount }}</div>
-                <div class="stat-label">Rooms</div>
-            </div>
-        </div>
+        @include('partials.dashboard.stat-card', ['icon' => 'bi bi-people', 'number' => $facultyCount, 'label' => 'Faculties'])
+        @include('partials.dashboard.stat-card', ['icon' => 'bi bi-journal-bookmark', 'number' => $courseCount, 'label' => 'Courses'])
+        @include('partials.dashboard.stat-card', ['icon' => 'bi bi-calendar2-week', 'number' => $scheduleCount, 'label' => 'Schedules'])
+        @include('partials.dashboard.stat-card', ['icon' => 'bi bi-door-closed', 'number' => $roomCount, 'label' => 'Rooms'])
     </div>
 
     <div class="dashboard-grid">
@@ -123,22 +87,10 @@
         <div class="card-body">
             <h5 class="mb-3">Scheduling Overview</h5>
             <div class="overview-grid">
-                <div class="overview-row">
-                    <span>Faculties</span>
-                    <div class="overview-bar"><span style="width: {{ min(100, $facultyCount * 8) }}%"></span></div>
-                </div>
-                <div class="overview-row">
-                    <span>Courses</span>
-                    <div class="overview-bar"><span style="width: {{ min(100, $courseCount * 6) }}%"></span></div>
-                </div>
-                <div class="overview-row">
-                    <span>Schedules</span>
-                    <div class="overview-bar"><span style="width: {{ min(100, $scheduleCount * 4) }}%"></span></div>
-                </div>
-                <div class="overview-row">
-                    <span>Rooms</span>
-                    <div class="overview-bar"><span style="width: {{ min(100, $roomCount * 10) }}%"></span></div>
-                </div>
+                @include('partials.dashboard.overview-row', ['label' => 'Faculties', 'value' => $facultyCount, 'multiplier' => 8])
+                @include('partials.dashboard.overview-row', ['label' => 'Courses', 'value' => $courseCount, 'multiplier' => 6])
+                @include('partials.dashboard.overview-row', ['label' => 'Schedules', 'value' => $scheduleCount, 'multiplier' => 4])
+                @include('partials.dashboard.overview-row', ['label' => 'Rooms', 'value' => $roomCount, 'multiplier' => 10])
             </div>
         </div>
     </div>

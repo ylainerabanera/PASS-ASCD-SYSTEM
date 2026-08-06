@@ -4,8 +4,6 @@
 <div class="container">
     <h3 class="mb-3">Add Schedule</h3>
 
-    @include('partials.errors')
-
     <form method="POST" action="{{ route('schedules.store') }}" class="card card-body" data-schedule-form>
         @csrf
         @include('schedules.partials.form', ['schedule' => null])

@@ -7,8 +7,6 @@
         <a class="btn btn-add" href="{{ route('rooms.create') }}"><i class="bi bi-plus-lg me-1"></i>Add Room</a>
     </div>
 
-    @include('partials.flash')
-
     <div class="card">
         <div class="card-body">
             <table class="table align-middle">

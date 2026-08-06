@@ -1,5 +1,1 @@
-@if (session('status'))
-    <div class="alert alert-success">
-        {{ session('status') }}
-    </div>
-@endif
+{{-- SweetAlert2 handles flash messages. --}}

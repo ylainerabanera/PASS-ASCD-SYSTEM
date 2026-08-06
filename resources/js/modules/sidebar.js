@@ -83,11 +83,17 @@ export const setupSidebar = () => {
 
             if (layout.classList.contains('sidebar-collapsed')) {
                 openSidebar();
-
                 if (reportMenu) {
                     reportMenu.classList.add('show');
                     reportToggle.setAttribute('aria-expanded', 'true');
                 }
+                return;
+            }
+
+            if (reportMenu) {
+                const isOpen = reportMenu.classList.contains('show');
+                reportMenu.classList.toggle('show');
+                reportToggle.setAttribute('aria-expanded', String(!isOpen));
             }
         });
     }
