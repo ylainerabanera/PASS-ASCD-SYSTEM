@@ -30,14 +30,14 @@
                                 <form action="{{ route('courses.destroy', $course) }}" method="POST" class="d-inline">
                                     @csrf
                                     @method('DELETE')
-                                    <button class="btn btn-sm btn-delete" onclick="return confirm('Delete this course?')"><i class="bi bi-trash me-1"></i>Delete</button>
+                                    <button class="btn btn-sm btn-delete" data-confirm="Delete this course?"><i class="bi bi-trash me-1"></i>Delete</button>
                                 </form>
                                 <a class="btn btn-sm btn-download" href="{{ route('exports.course.pdf', $course) }}" target="_blank" rel="noopener"><i class="bi bi-file-earmark-pdf me-1"></i>PDF</a>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="2">No courses yet.</td>
+                            <td colspan="3">No courses yet.</td>
                         </tr>
                     @endforelse
                 </tbody>

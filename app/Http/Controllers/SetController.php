@@ -27,7 +27,7 @@ class SetController extends Controller
         $data = $request->validate([
             'course_id' => ['required', 'exists:courses,id'],
             'year_level' => ['required', 'integer', 'between:1,4'],
-            'set_code' => ['nullable', 'string', 'size:1', 'in:A,B,C,D,E,F'],
+            'set_code' => ['nullable', 'string', 'size:1', 'in:A,B,C,D,E,F, G'],
             'student_count' => ['required', 'integer', 'min:0'],
         ]);
 
@@ -48,7 +48,7 @@ class SetController extends Controller
         $data = $request->validate([
             'course_id' => ['required', 'exists:courses,id'],
             'year_level' => ['required', 'integer', 'between:1,4'],
-            'set_code' => ['nullable', 'string', 'size:1', 'in:A,B,C,D,E,F'],
+            'set_code' => ['nullable', 'string', 'size:1', 'in:A,B,C,D,E,F, G'],
             'student_count' => ['required', 'integer', 'min:0'],
         ]);
 

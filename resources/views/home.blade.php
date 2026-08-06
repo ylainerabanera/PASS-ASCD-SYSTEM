@@ -23,7 +23,7 @@
     <div class="dashboard-header">
         <div>
             <h2>Dashboard</h2>
-            <p class="text-muted">Welcome back, Admin. Here’s what’s happening today.</p>
+            <p class="text-muted">Welcome back, PASS Admin. Here’s what’s happening today.</p>
         </div>
     </div>
 

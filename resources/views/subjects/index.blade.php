@@ -34,14 +34,14 @@
                                     <form action="{{ route('subjects.destroy', $subject) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button class="btn btn-sm btn-delete" onclick="return confirm('Delete this subject?')"><i class="bi bi-trash me-1"></i>Delete</button>
+                                        <button class="btn btn-sm btn-delete" data-confirm="Delete this subject?"><i class="bi bi-trash me-1"></i>Delete</button>
                                     </form>
                                 </div>
                             </td>
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4">No subjects yet.</td>
+                            <td colspan="5">No subjects yet.</td>
                         </tr>
                     @endforelse
                 </tbody>

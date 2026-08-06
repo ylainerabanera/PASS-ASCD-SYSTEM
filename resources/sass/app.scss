@@ -20,6 +20,8 @@
     --surface-muted: #f3f5f7;
     --border-soft: #d9e2ec;
     --shadow-soft: 0 24px 60px rgba(15, 23, 42, 0.08);
+    --sidebar-width: 240px;
+    --sidebar-mobile-width: min(240px, 86vw);
 }
 
 body {
@@ -39,16 +41,19 @@ body {
     display: flex;
     min-height: 100vh;
     flex: 1;
+    min-width: 0;
+    width: 100%;
 }
 
 .sidebar {
-    width: 240px;
+    width: var(--sidebar-width);
+    flex: 0 0 var(--sidebar-width);
     background: var(--accent-yellow);
     padding: 24px 16px;
     position: sticky;
     top: 0;
     height: 100vh;
-    transition: width 0.25s ease, padding 0.25s ease;
+    transition: width 0.25s ease, flex-basis 0.25s ease, padding 0.25s ease, transform 0.25s ease;
     display: flex;
     flex-direction: column;
     overflow: hidden;
@@ -89,6 +94,14 @@ body {
 .brand-sub {
     font-size: 0.8rem;
     color: #2b2b2b;
+}
+
+.brand-text,
+.sidebar-link span {
+    min-width: 0;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .sidebar-nav {
@@ -184,9 +197,10 @@ body {
 }
 
 .main-content {
-    flex: 1;
+    flex: 1 1 auto;
     display: flex;
     flex-direction: column;
+    min-width: 0;
     transition: margin-left 0.25s ease;
 }
 
@@ -290,6 +304,7 @@ body {
 .content-area {
     padding: 24px;
     flex: 1;
+    min-width: 0;
 }
 
 .content-area .container {
@@ -407,6 +422,38 @@ body {
 .card .card-body .table {
     width: 100%;
     margin: 0 auto;
+}
+
+@supports selector(:has(*)) {
+    .card-body:has(> .table) {
+        overflow-x: auto;
+    }
+
+    .card-body:has(> .table) > .table {
+        min-width: 760px;
+    }
+}
+
+.schedule-table-wrap {
+    overflow-x: auto;
+}
+
+.schedule-table {
+    min-width: 1180px;
+}
+
+.schedule-table th,
+.schedule-table td {
+    white-space: nowrap;
+}
+
+.schedule-table td:nth-child(3),
+.schedule-table td:nth-child(6) {
+    white-space: normal;
+}
+
+.schedule-table .table-actions {
+    min-width: 190px;
 }
 
 .btn {
@@ -819,60 +866,18 @@ h1, h2, h3 { font-weight: 700; letter-spacing: 0.2px; }
     margin-bottom: 0;
 }
 
-.app-layout.sidebar-collapsed .sidebar {
-    width: 78px;
-    padding: 20px 10px;
-}
-
-.app-layout.sidebar-collapsed .sidebar .brand-text,
-.app-layout.sidebar-collapsed .sidebar-nav span {
-    display: none;
-}
-
-.app-layout.sidebar-collapsed .sidebar-brand {
-    justify-content: center;
-    text-align: center;
-}
-
-.app-layout.sidebar-collapsed .brand-mark {
-    margin: 0 auto;
-}
-
-.app-layout.sidebar-collapsed .sidebar-link {
-    justify-content: center;
-    padding: 10px;
-}
-
-.app-layout.sidebar-collapsed .sidebar-link i {
-    width: auto;
-}
-
+.app-layout.sidebar-collapsed .sidebar,
 .sidebar-collapsed .app-layout .sidebar {
-    width: 78px;
-    padding: 20px 10px;
+    width: 0;
+    flex-basis: 0;
+    padding: 0;
+    border: 0;
 }
 
-.sidebar-collapsed .app-layout .sidebar .brand-text,
-.sidebar-collapsed .app-layout .sidebar-nav span {
-    display: none;
-}
-
-.sidebar-collapsed .app-layout .sidebar-brand {
-    justify-content: center;
-    text-align: center;
-}
-
-.sidebar-collapsed .app-layout .brand-mark {
-    margin: 0 auto;
-}
-
-.sidebar-collapsed .app-layout .sidebar-link {
-    justify-content: center;
-    padding: 10px;
-}
-
-.sidebar-collapsed .app-layout .sidebar-link i {
-    width: auto;
+.app-layout.sidebar-collapsed .sidebar > *,
+.sidebar-collapsed .app-layout .sidebar > * {
+    opacity: 0;
+    pointer-events: none;
 }
 
 .timetable-cell.empty {
@@ -1086,15 +1091,23 @@ h1, h2, h3 { font-weight: 700; letter-spacing: 0.2px; }
         height: 100%;
         transform: translateX(-100%);
         z-index: 40;
-        width: 240px;
+        width: var(--sidebar-mobile-width);
+        flex-basis: var(--sidebar-mobile-width);
         padding: 24px 16px;
         transition: transform 0.25s ease;
     }
 
     .app-layout.sidebar-collapsed .sidebar,
     .sidebar-collapsed .app-layout .sidebar {
-        width: 240px;
+        width: var(--sidebar-mobile-width);
+        flex-basis: var(--sidebar-mobile-width);
         padding: 24px 16px;
+    }
+
+    .app-layout.sidebar-collapsed .sidebar > *,
+    .sidebar-collapsed .app-layout .sidebar > * {
+        opacity: 1;
+        pointer-events: auto;
     }
 
     .app-layout.sidebar-collapsed .sidebar .brand-text,
@@ -1152,6 +1165,10 @@ h1, h2, h3 { font-weight: 700; letter-spacing: 0.2px; }
 
     .card-body .table {
         min-width: 600px;
+    }
+
+    .schedule-table {
+        min-width: 980px;
     }
 
     .table-actions {

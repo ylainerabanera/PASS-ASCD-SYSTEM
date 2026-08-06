@@ -9,7 +9,7 @@
         </div>
         <div class="login-topbar-text">PASS COLLEGE</div>
     </nav>
-    <div class="login-card">
+    <div class="login-card mt-5">
         <div class="login-logo">
             <img src="/images/logo.png" alt="Logo">
         </div>

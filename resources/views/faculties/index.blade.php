@@ -31,7 +31,7 @@
                                     <form action="{{ route('faculties.destroy', $faculty) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button class="btn btn-sm btn-delete" onclick="return confirm('Delete this faculty?')"><i class="bi bi-trash me-1"></i>Delete</button>
+                                        <button class="btn btn-sm btn-delete" data-confirm="Delete this faculty?"><i class="bi bi-trash me-1"></i>Delete</button>
                                     </form>
                                     <a class="btn btn-sm btn-download" href="{{ route('exports.faculty.pdf', $faculty) }}" target="_blank" rel="noopener"><i class="bi bi-file-earmark-pdf me-1"></i>PDF</a>
                                 </div>
@@ -39,7 +39,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="2">No faculties yet.</td>
+                            <td colspan="3">No faculties yet.</td>
                         </tr>
                     @endforelse
                 </tbody>

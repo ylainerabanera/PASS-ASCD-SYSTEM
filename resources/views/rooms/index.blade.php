@@ -35,7 +35,7 @@
                                     <form action="{{ route('rooms.destroy', $room) }}" method="POST" class="d-inline">
                                         @csrf
                                         @method('DELETE')
-                                        <button class="btn btn-sm btn-delete" onclick="return confirm('Delete this room?')"><i class="bi bi-trash me-1"></i>Delete</button>
+                                        <button class="btn btn-sm btn-delete" data-confirm="Delete this room?"><i class="bi bi-trash me-1"></i>Delete</button>
                                     </form>
                                     <a class="btn btn-sm btn-download" href="{{ route('exports.room.pdf', $room) }}" target="_blank" rel="noopener"><i class="bi bi-file-earmark-pdf me-1"></i>PDF</a>
                                 </div>
@@ -43,7 +43,7 @@
                         </tr>
                     @empty
                         <tr>
-                            <td colspan="4">No rooms yet.</td>
+                            <td colspan="5">No rooms yet.</td>
                         </tr>
                     @endforelse
                 </tbody>

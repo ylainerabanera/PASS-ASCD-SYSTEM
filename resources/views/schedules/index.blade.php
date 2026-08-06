@@ -19,69 +19,71 @@
             <div class="card mb-3">
                 <div class="card-header">{{ $day }}</div>
                 <div class="card-body">
-                    <table class="table align-middle">
-                        <thead>
-                            <tr>
-                                <th>No.</th>
-                                <th>Time</th>
-                                <th>Subject</th>
-                                <th>Set</th>
-                                <th>Faculty</th>
-                                <th>Room</th>
-                                <th>Class Type</th>
-                                <th>G Code</th>
-                                <th>Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @forelse ($daySchedules as $schedule)
+                    <div class="table-responsive schedule-table-wrap">
+                        <table class="table align-middle schedule-table">
+                            <thead>
                                 <tr>
-                                    <td>{{ $loop->iteration }}</td>
-                                    <td>{{ \Carbon\Carbon::parse($schedule->start_time)->format('g:i A') }} -
-                                        {{ \Carbon\Carbon::parse($schedule->end_time)->format('g:i A') }}</td>
-                                    <td>{{ $schedule->subject->subject_code }} - {{ $schedule->subject->subject_name }}</td>
-                                    <td>{{ $schedule->set->display_name }}</td>
-                                    <td>{{ $schedule->faculty->name }}</td>
-                                    <td>
-                                        {{ $schedule->class_type === 'online' ? '—' : ($schedule->room ? $schedule->room->building_name . ' ' . $schedule->room->room_name : '—') }}
-                                    </td>
-                                    <td>{{ $schedule->class_type === 'online' ? 'Online' : 'Face-to-Face' }}</td>
-                                    <td>
-                                        @if ($schedule->class_type === 'online')
-                                            @php $value = $schedule->g_code ?? 'none'; @endphp
-
-                                            @if ($value === 'none')
-                                                <i style="color:#797979">none</i>
+                                    <th>No.</th>
+                                    <th>Time</th>
+                                    <th>Subject</th>
+                                    <th>Set</th>
+                                    <th>Faculty</th>
+                                    <th>Room</th>
+                                    <th>Class Type</th>
+                                    <th>G Code</th>
+                                    <th>Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                @forelse ($daySchedules as $schedule)
+                                    <tr>
+                                        <td>{{ $loop->iteration }}</td>
+                                        <td>
+                                            {{ \Carbon\Carbon::parse($schedule->start_time)->format('g:i A') }} -
+                                            {{ \Carbon\Carbon::parse($schedule->end_time)->format('g:i A') }}
+                                        </td>
+                                        <td>{{ $schedule->subject->subject_code }} - {{ $schedule->subject->subject_name }}</td>
+                                        <td>{{ $schedule->set->display_name }}</td>
+                                        <td>{{ $schedule->faculty->name }}</td>
+                                        <td>
+                                            {{ $schedule->class_type === 'online' ? '-' : ($schedule->room ? $schedule->room->building_name . ' ' . $schedule->room->room_name : '-') }}
+                                        </td>
+                                        <td>{{ $schedule->class_type === 'online' ? 'Online' : 'Face-to-Face' }}</td>
+                                        <td>
+                                            @if ($schedule->class_type === 'online')
+                                                @php $value = $schedule->g_code ?? 'none'; @endphp
+                                                @if ($value === 'none')
+                                                    <i class="text-muted">none</i>
+                                                @else
+                                                    {{ $value }}
+                                                @endif
                                             @else
-                                                {{ $value }}
+                                                <i class="text-muted">onsite</i>
                                             @endif
-                                        @else
-                                            <i style="color:#797979">onsite</i>
-                                        @endif
-                                    </td>
-                                    <td>
-                                        <div class="table-actions">
-                                            <a class="btn btn-sm btn-edit"
-                                                href="{{ route('schedules.edit', $schedule) }}"><i
-                                                    class="bi bi-pencil-square me-1"></i>Edit</a>
-                                            <form action="{{ route('schedules.destroy', $schedule) }}" method="POST"
-                                                class="d-inline">
-                                                @csrf
-                                                @method('DELETE')
-                                                <button class="btn btn-sm btn-delete"
-                                                    onclick="return confirm('Delete this schedule?')"><i
-                                                        class="bi bi-trash me-1"></i>Delete</button>
-                                            </form>
-                                        </div>
-                                    </td>
-                                </tr>
-                            @empty
-                                <tr>
-                                    <td colspan="8" class="text-muted">No schedules for {{ $day }}.</td>
-                                </tr>
-                            @endforelse
-                        </tbody>
-                    </table>
+                                        </td>
+                                        <td>
+                                            <div class="table-actions">
+                                                <a class="btn btn-sm btn-edit" href="{{ route('schedules.edit', $schedule) }}">
+                                                    <i class="bi bi-pencil-square me-1"></i>Edit
+                                                </a>
+                                                <form action="{{ route('schedules.destroy', $schedule) }}" method="POST" class="d-inline">
+                                                    @csrf
+                                                    @method('DELETE')
+                                                    <button class="btn btn-sm btn-delete" data-confirm="Delete this schedule?">
+                                                        <i class="bi bi-trash me-1"></i>Delete
+                                                    </button>
+                                                </form>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                @empty
+                                    <tr>
+                                        <td colspan="9" class="text-muted">No schedules for {{ $day }}.</td>
+                                    </tr>
+                                @endforelse
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </div>
         @empty
